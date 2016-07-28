@@ -43,7 +43,7 @@ public class CypherFunction extends Function<Object, Object> {
 	public Object apply(final ActionContext ctx, final GraphObject entity, final Object[] sources) throws FrameworkException {
 
 		try {
-			if (!arrayHasLengthAndAllElementsNotNull(sources, 1)) {
+			if (!arrayHasMinLengthAndAllElementsNotNull(sources, 1)) {
 				
 				return null;
 			}
