@@ -18,10 +18,14 @@
  */
 package org.structr.core.entity;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.structr.common.SecurityContext;
 import org.structr.common.error.ErrorBuffer;
 import org.structr.common.error.FrameworkException;
+import org.structr.common.error.SemanticErrorToken;
 import org.structr.core.graph.ModificationQueue;
 import static org.structr.core.graph.NodeInterface.name;
 import org.structr.core.graph.TransactionCommand;
@@ -34,10 +38,21 @@ import org.structr.schema.SchemaHelper;
  */
 public abstract class SchemaReloadingNode extends AbstractNode {
 
+	private static final Set<String> ReservedWords = new HashSet<>(Arrays.asList(new String[] {
+
+		"abstract", "continue", "for", "new", "switch", "assert", "default","goto",
+		"package", "synchronize", "boolean", "do", "if", "private", "this", "break",
+		"double", "implements", "protected", "throw", "byte", "else", "import",
+		"public", "throw", "case", "enum", "instanceof", "return", "transient",
+		"catch", "extends", "int", "short", "try", "char", "final", "interface",
+		"static", "void", "class", "finally", "long", "strictfp", "volatile",
+		"const", "float", "native", "super", "while"
+	}));
+
 	@Override
 	public boolean onCreation(SecurityContext securityContext, ErrorBuffer errorBuffer) throws FrameworkException {
 
-		if (super.onCreation(securityContext, errorBuffer)) {
+		if (checkName(errorBuffer) && super.onCreation(securityContext, errorBuffer)) {
 
 			// register transaction post processing that recreates the schema information
 			TransactionCommand.postProcess("reloadSchema", new ReloadSchema());
@@ -51,7 +66,7 @@ public abstract class SchemaReloadingNode extends AbstractNode {
 	@Override
 	public boolean onModification(SecurityContext securityContext, ErrorBuffer errorBuffer, final ModificationQueue modificationQueue) throws FrameworkException {
 
-		if (super.onModification(securityContext, errorBuffer, modificationQueue)) {
+		if (checkName(errorBuffer) && super.onModification(securityContext, errorBuffer, modificationQueue)) {
 
 			// register transaction post processing that recreates the schema information
 			TransactionCommand.postProcess("reloadSchema", new ReloadSchema());
@@ -93,5 +108,43 @@ public abstract class SchemaReloadingNode extends AbstractNode {
 		}
 
 		return superclassName.substring(superclassName.lastIndexOf(".")+1);
+	}
+
+	// ----- private methods -----
+	protected boolean checkName(final ErrorBuffer errorBuffer) throws FrameworkException {
+
+		// since we're creating Java code, we need to make sure that no
+		// reserved words or existing class names are overwritten
+		final String _name = getProperty(AbstractNode.name);
+		if (_name != null) {
+
+			if (ReservedWords.contains(_name)) {
+
+				errorBuffer.add(new SemanticErrorToken(_name, AbstractNode.name, "name_is_reserved"));
+				return false;
+			}
+
+			try {
+
+				Class.forName("org.structr.web.entity.html." + _name);
+
+				// if the above calls do NOT fail, the class already exists => error
+				errorBuffer.add(new SemanticErrorToken(_name, AbstractNode.name, "type_already_exists"));
+				return false;
+
+			} catch (ClassNotFoundException ignore) {}
+
+			try {
+
+				Class.forName("org.structr.dynamic." + _name);
+
+				// if the above calls do NOT fail, the class already exists => error
+				errorBuffer.add(new SemanticErrorToken(_name, AbstractNode.name, "type_already_exists"));
+				return false;
+
+			} catch (ClassNotFoundException ignore) {}
+		}
+
+		return true;
 	}
 }

@@ -21,6 +21,7 @@ package org.structr.core.entity;
 import java.util.List;
 import org.structr.common.PropertyView;
 import org.structr.common.View;
+import org.structr.common.error.ErrorBuffer;
 import org.structr.core.entity.relationship.SchemaNodeView;
 import org.structr.core.entity.relationship.SchemaViewProperty;
 import static org.structr.core.graph.NodeInterface.name;
@@ -57,4 +58,11 @@ public class SchemaView extends SchemaReloadingNode {
 	public static final View exportView = new View(SchemaMethod.class, "export",
 		id, type, name, schemaNode, nonGraphProperties, isBuiltinView
 	);
+
+	@Override
+	protected boolean checkName(final ErrorBuffer errorBuffer) {
+
+		// disable name check for SchemaView ("public" is allowed as a name here)
+		return true;
+	}
 }
