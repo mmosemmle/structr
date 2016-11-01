@@ -156,8 +156,8 @@ public class RDFImporter extends SchemaImporter implements MaintenanceCommand {
 
 			cypher.append(" { ");
 
-			cypher.append("name: '").append(rdfClass.name).append("' ");
-			if (StringUtils.isNotBlank(rdfClass.comment)) { cypher.append(", comment: '").append(rdfClass.comment).append("' "); }
+			cypher.append("name: '").append(rdfClass.name.replaceAll("'", "\'")).append("' ");
+			if (StringUtils.isNotBlank(rdfClass.comment)) { cypher.append(", comment: '").append(rdfClass.comment.replaceAll("'", "\'")).append("' "); }
 
 			cypher.append("})\n");
 		}

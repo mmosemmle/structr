@@ -405,7 +405,7 @@ public abstract class AbstractHintProvider {
 				final String keyName = propertyKey.jsonName();
 				if (!keyName.startsWith(PropertyView.Html) && !keyName.startsWith("data-structr-")) {
 
-					final Hint propertyHint = createHint(keyName, "", type.getSimpleName() + " property");
+					final Hint propertyHint = createHint(keyName, "", SchemaHelper.parseClassName(type.getSimpleName()) + " property");
 
 					// allow sorting by dynamic / static properties
 					propertyHint.setIsDynamic(propertyKey.isDynamic());

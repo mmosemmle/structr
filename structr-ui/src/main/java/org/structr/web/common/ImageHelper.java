@@ -35,6 +35,7 @@ import org.structr.core.app.StructrApp;
 import org.structr.core.entity.AbstractNode;
 import org.structr.core.property.PropertyMap;
 import org.structr.dynamic.File;
+import org.structr.schema.SchemaHelper;
 import org.structr.util.Base64;
 import static org.structr.web.common.FileHelper.setFileData;
 import org.structr.web.entity.Image;
@@ -84,7 +85,7 @@ public abstract class ImageHelper extends FileHelper {
 
 		final PropertyMap props = new PropertyMap();
 
-		props.put(AbstractNode.type, imageType == null ? Image.class.getSimpleName() : imageType.getSimpleName());
+		props.put(AbstractNode.type, imageType == null ? Image.class.getSimpleName() : SchemaHelper.parseClassName(imageType.getSimpleName()));
 		props.put(Image.isThumbnail, markAsThumbnail);
 		props.put(AbstractNode.name, name);
 

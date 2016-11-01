@@ -38,6 +38,7 @@ import org.structr.common.error.FrameworkException;
 import org.structr.core.app.App;
 import org.structr.core.app.StructrApp;
 import org.structr.core.graph.Tx;
+import org.structr.schema.SchemaHelper;
 import org.structr.web.entity.AbstractFile;
 import org.structr.web.entity.FileBase;
 import org.structr.web.entity.Folder;
@@ -76,7 +77,7 @@ public class StructrSSHFile implements Path {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + " (" + name + ")";
+		return SchemaHelper.parseClassName(getClass().getSimpleName()) + " (" + name + ")";
 	}
 
 	public SecurityContext getSecurityContext() {

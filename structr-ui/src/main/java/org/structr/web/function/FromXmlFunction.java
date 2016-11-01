@@ -27,6 +27,7 @@ import org.structr.core.function.XmlFunction;
 import org.structr.core.property.GenericProperty;
 import org.structr.core.property.Property;
 import org.structr.core.property.StringProperty;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.action.ActionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -143,7 +144,7 @@ public class FromXmlFunction extends UiFunction {
 			map.put(attributesProperty, attributes);
 		}
 
-		map.put(typeProperty, node.getClass().getSimpleName());
+		map.put(typeProperty, SchemaHelper.parseClassName(node.getClass().getSimpleName()));
 
 		final String nodeName = node.getNodeName();
 		if (nodeName != null) {

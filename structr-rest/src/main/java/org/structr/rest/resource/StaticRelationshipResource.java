@@ -63,6 +63,7 @@ import org.structr.core.property.StringProperty;
 import org.structr.rest.RestMethodResult;
 import org.structr.rest.exception.IllegalPathException;
 import org.structr.rest.exception.NotFoundException;
+import org.structr.schema.SchemaHelper;
 
 //~--- classes ----------------------------------------------------------------
 /**
@@ -359,7 +360,7 @@ public class StaticRelationshipResource extends SortableResource {
 					result = SchemaMethodResource.wrapInResult(typedIdResource.getEntity().invokeMethod(methodName, propertySet, true));
 
 				} catch (Throwable t) {
-					logger.warn("Unable to execute {}.{}: {}", entityType.getSimpleName(), methodName, t.getMessage());
+					logger.warn("Unable to execute {}.{}: {}", SchemaHelper.parseClassName(entityType.getSimpleName()), methodName, t.getMessage());
 				}
 			}
 		}

@@ -108,7 +108,7 @@ public class SchemaService implements Service {
 						final String auxSource = schemaNode.getAuxiliarySource();
 						if (auxSource != null) {
 
-							nodeExtender.addClass("_" + schemaNode.getClassName() + "Helper", auxSource);
+							nodeExtender.addClass("_" + SchemaHelper.parseClassName(schemaNode.getClassName()) + "Helper", auxSource);
 						}
 
 						dynamicViews.addAll(schemaNode.getViews());
@@ -221,7 +221,7 @@ public class SchemaService implements Service {
 
 			SchemaNode schemaNode = app.nodeQuery(SchemaNode.class).andName(type).getFirst();
 			if (schemaNode == null) {
-
+				logger.info("No schema node found for " + type + " (" + fqcn + "), creating new one");
 				schemaNode = app.create(SchemaNode.class, type);
 			}
 

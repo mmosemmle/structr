@@ -27,6 +27,7 @@ import org.structr.core.GraphObject;
 import org.structr.core.graph.NodeFactory;
 import org.structr.core.graph.NodeInterface;
 import org.structr.core.graph.search.SearchCommand;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -48,7 +49,7 @@ public class OtherNodeTypeFilter implements Predicate<Relationship> {
 		this.nodePredicate = nodePredicate;
 		this.nodeFactory   = new NodeFactory(securityContext);
 		this.thisNode      = thisNode;
-		this.subtypes      = SearchCommand.getAllSubtypesAsStringSet(desiredType.getSimpleName());
+		this.subtypes      = SearchCommand.getAllSubtypesAsStringSet(SchemaHelper.parseClassName(desiredType.getSimpleName()));
 	}
 
 	@Override
@@ -60,7 +61,7 @@ public class OtherNodeTypeFilter implements Predicate<Relationship> {
 		if (otherNode != null && (nodePredicate == null || nodePredicate.accept(otherNode))) {
 
 			final Class otherNodeType                              = otherNode.getClass();
-			final boolean desiredTypeIsAssignableFromOtherNodeType = subtypes.contains(otherNodeType.getSimpleName());
+			final boolean desiredTypeIsAssignableFromOtherNodeType = subtypes.contains(SchemaHelper.parseClassName(otherNodeType.getSimpleName()));
 
 			return desiredTypeIsAssignableFromOtherNodeType;
 		}

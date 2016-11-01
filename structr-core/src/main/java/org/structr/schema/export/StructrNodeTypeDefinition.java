@@ -28,6 +28,7 @@ import org.structr.core.app.StructrApp;
 import org.structr.core.entity.Relation.Cardinality;
 import org.structr.core.entity.SchemaNode;
 import org.structr.core.entity.SchemaRelationshipNode;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.json.JsonObjectType;
 import org.structr.schema.json.JsonReferenceType;
 import org.structr.schema.json.JsonSchema;
@@ -53,7 +54,7 @@ public class StructrNodeTypeDefinition extends StructrTypeDefinition<SchemaNode>
 		final Class type = StructrApp.resolveSchemaId(externalTypeReference);
 		if (type != null) {
 
-			return relate(externalTypeReference, SchemaRelationshipNode.getDefaultRelationshipType(getName(), type.getSimpleName()));
+			return relate(externalTypeReference, SchemaRelationshipNode.getDefaultRelationshipType(getName(), SchemaHelper.parseClassName(type.getSimpleName())));
 		}
 
 		throw new IllegalStateException("External reference " + externalTypeReference + " not found.");
@@ -84,8 +85,8 @@ public class StructrNodeTypeDefinition extends StructrTypeDefinition<SchemaNode>
 		final Class type = StructrApp.resolveSchemaId(externalTypeReference);
 		if (type != null) {
 
-			final String sourcePropertyName = getPropertyName(type.getSimpleName(), false,  relationship, cardinality);
-			final String targetPropertyName = getPropertyName(type.getSimpleName(), true, relationship, cardinality);
+			final String sourcePropertyName = getPropertyName(SchemaHelper.parseClassName(type.getSimpleName()), false,  relationship, cardinality);
+			final String targetPropertyName = getPropertyName(SchemaHelper.parseClassName(type.getSimpleName()), true, relationship, cardinality);
 
 			return relate(externalTypeReference, relationship, cardinality, sourcePropertyName, targetPropertyName);
 		}
@@ -118,7 +119,7 @@ public class StructrNodeTypeDefinition extends StructrTypeDefinition<SchemaNode>
 		final Class type = StructrApp.resolveSchemaId(externalTypeReference);
 		if (type != null) {
 
-			final String relationshipTypeName           = getName() + relationship + type.getSimpleName();
+			final String relationshipTypeName           = getName() + relationship + SchemaHelper.parseClassName(type.getSimpleName());
 			final StructrRelationshipTypeDefinition def = new StructrRelationshipTypeDefinition(root, relationshipTypeName);
 
 			// initialize

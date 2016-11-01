@@ -50,6 +50,7 @@ import org.structr.core.graph.RelationshipInterface;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -446,7 +447,7 @@ public abstract class SearchCommand<S extends PropertyContainer, T extends Graph
 		// create a new search group
 		and();
 
-		for (final String subtype : getAllSubtypesAsStringSet(type.getSimpleName())) {
+		for (final String subtype : getAllSubtypesAsStringSet(SchemaHelper.parseClassName(type.getSimpleName()))) {
 			orType(subtype);
 		}
 
@@ -466,7 +467,7 @@ public abstract class SearchCommand<S extends PropertyContainer, T extends Graph
 		// create a new search group
 		or();
 
-		for (final String subtype : getAllSubtypesAsStringSet(type.getSimpleName())) {
+		for (final String subtype : getAllSubtypesAsStringSet(SchemaHelper.parseClassName(type.getSimpleName()))) {
 			orType(subtype);
 		}
 
@@ -694,7 +695,7 @@ public abstract class SearchCommand<S extends PropertyContainer, T extends Graph
 		if (allSubtypes == null) {
 
 			allSubtypes = new LinkedHashSet<>();
-			subtypeMapForType.put(type, allSubtypes);
+			subtypeMapForType.put(SchemaHelper.parseClassName(type), allSubtypes);
 
 			final ConfigurationProvider configuration                             = StructrApp.getConfiguration();
 			final Map<String, Class<? extends NodeInterface>> nodeEntities        = configuration.getNodeEntities();
@@ -717,7 +718,7 @@ public abstract class SearchCommand<S extends PropertyContainer, T extends Graph
 
 					if ((superClassFullName.startsWith("org.structr.") || superClassFullName.startsWith("com.structr.")) && superClasSimpleName.equals(type)) {
 
-						allSubtypes.add(entityType.getSimpleName());
+						allSubtypes.add(SchemaHelper.parseClassName(entityType.getSimpleName()));
 					}
 				}
 			}
@@ -735,7 +736,7 @@ public abstract class SearchCommand<S extends PropertyContainer, T extends Graph
 
 					if ((superClassFullName.startsWith("org.structr.") || superClassFullName.startsWith("com.structr.")) && superClasSimpleName.equals(type)) {
 
-						allSubtypes.add(entityType.getSimpleName());
+						allSubtypes.add(SchemaHelper.parseClassName(entityType.getSimpleName()));
 					}
 				}
 			}

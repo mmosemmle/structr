@@ -47,6 +47,7 @@ import org.structr.core.property.Property;
 import org.structr.core.property.PropertyMap;
 import org.structr.core.property.StringProperty;
 import org.structr.rest.RestMethodResult;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.SchemaService;
 
 /**
@@ -310,7 +311,7 @@ public class XMPPClient extends AbstractNode implements XMPPInfo {
 			final XMPPClient client = StructrApp.getInstance().get(XMPPClient.class, uuid);
 			if (client != null) {
 
-				final String callbackName            = "onXMPP" + message.getClass().getSimpleName();
+				final String callbackName            = "onXMPP" + SchemaHelper.parseClassName(message.getClass().getSimpleName());
 				final Map<String, Object> properties = new HashMap<>();
 
 				properties.put("sender", message.getFrom());

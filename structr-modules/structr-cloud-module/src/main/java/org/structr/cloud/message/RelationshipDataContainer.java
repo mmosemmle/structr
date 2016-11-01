@@ -26,6 +26,7 @@ import org.structr.common.error.FrameworkException;
 import org.structr.core.entity.AbstractRelationship;
 import org.structr.core.graph.RelationshipInterface;
 import org.structr.core.graph.SyncCommand;
+import org.structr.schema.SchemaHelper;
 
 /**
  * Serializable data container for a relationship to be transported over network.
@@ -51,7 +52,7 @@ public class RelationshipDataContainer extends DataContainer implements Comparab
 
 		super(sequenceNumber);
 
-		relType = relationship.getClass().getSimpleName();
+		relType = SchemaHelper.parseClassName(relationship.getClass().getSimpleName());
 
 		sourceStartNodeId = relationship.getSourceNode().getUuid();
 		sourceEndNodeId   = relationship.getTargetNode().getUuid();

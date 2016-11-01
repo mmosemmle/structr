@@ -23,6 +23,7 @@ import org.structr.api.search.Occurrence;
 import org.structr.api.search.TypeQuery;
 import org.structr.core.GraphObject;
 import org.structr.core.entity.AbstractNode;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -33,13 +34,14 @@ public class TypeSearchAttribute<S extends GraphObject> extends PropertySearchAt
 	private Set<String> types = null;
 
 	public TypeSearchAttribute(Class<S> type, Occurrence occur, boolean isExactMatch) {
-		this(type.getSimpleName(), occur, isExactMatch);
+		this(SchemaHelper.parseClassName(SchemaHelper.parseClassName(type.getSimpleName())), occur, isExactMatch);
 	}
 
 	public TypeSearchAttribute(String type, Occurrence occur, boolean isExactMatch) {
-		super(AbstractNode.type, type, occur, isExactMatch);
+		super(AbstractNode.type, SchemaHelper.parseClassName(type), occur, isExactMatch);
 
-		this.types  = SearchCommand.getAllSubtypesAsStringSet(type);
+
+		this.types  = SearchCommand.getAllSubtypesAsStringSet(SchemaHelper.parseClassName(type));
 	}
 
 	@Override

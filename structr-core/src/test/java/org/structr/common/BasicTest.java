@@ -67,6 +67,7 @@ import org.structr.core.graph.Tx;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
 import org.structr.core.property.StringProperty;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -828,7 +829,7 @@ public class BasicTest extends StructrTest {
 
 					NodeInterface node = app.create(type, props);
 
-					assertTrue(type.getSimpleName().equals(node.getProperty(AbstractNode.type)));
+					assertTrue(SchemaHelper.parseClassName(type.getSimpleName()).equals(node.getProperty(AbstractNode.type)));
 
 					// Remove mandatory fields for ResourceAccess from props map
 					if (type.equals(ResourceAccess.class)) {

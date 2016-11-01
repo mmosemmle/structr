@@ -73,6 +73,7 @@ import org.structr.core.graph.Tx;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
 import org.structr.core.property.StringProperty;
+import org.structr.schema.SchemaHelper;
 
 /**
  */
@@ -81,7 +82,7 @@ public class SearchAndSortingTest extends StructrTest {
 	private static final Logger logger = LoggerFactory.getLogger(SearchAndSortingTest.class.getName());
 
 	@Test
-	public void test01SeachByName() {
+	public void test01SearchByName() {
 
 		try  {
 
@@ -139,7 +140,7 @@ public class SearchAndSortingTest extends StructrTest {
 	}
 
 	@Test
-	public void test02SeachByNameProperty() {
+	public void test02SearchByNameProperty() {
 
 		try  {
 
@@ -190,7 +191,7 @@ public class SearchAndSortingTest extends StructrTest {
 	}
 
 	@Test
-	public void test03SeachByNamePropertyLooseLowercase() {
+	public void test03SearchByNamePropertyLooseLowercase() {
 
 		try  {
 
@@ -241,7 +242,7 @@ public class SearchAndSortingTest extends StructrTest {
 	}
 
 	@Test
-	public void test04SeachByNamePropertyLooseUppercase() {
+	public void test04SearchByNamePropertyLooseUppercase() {
 
 		try  {
 
@@ -292,7 +293,7 @@ public class SearchAndSortingTest extends StructrTest {
 	}
 
 	@Test
-	public void test05SeachByDefaultValue() {
+	public void test05SearchByDefaultValue() {
 
 		try  {
 
@@ -1224,7 +1225,7 @@ public class SearchAndSortingTest extends StructrTest {
 			final PropertyKey lat   = TestSeven.latitude;
 			final PropertyKey lon   = TestSeven.longitude;
 
-			props.put(AbstractNode.type, type.getSimpleName());
+			props.put(AbstractNode.type, SchemaHelper.parseClassName(type.getSimpleName()));
 			props.put(lat, 50.12284d);
 			props.put(lon, 8.73923d);
 			props.put(AbstractNode.name, "TestSeven-0");

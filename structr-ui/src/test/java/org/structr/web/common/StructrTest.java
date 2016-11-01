@@ -54,6 +54,7 @@ import org.structr.core.graph.Tx;
 import org.structr.core.property.PropertyMap;
 import org.structr.module.JarConfigurationProvider;
 import org.structr.rest.service.HttpService;
+import org.structr.schema.SchemaHelper;
 
 //~--- classes ----------------------------------------------------------------
 
@@ -236,7 +237,7 @@ public class StructrTest {
 
 	protected <T extends AbstractNode> T createTestNode(final Class<T> type, final PropertyMap props) throws FrameworkException {
 
-		props.put(AbstractNode.type, type.getSimpleName());
+		props.put(AbstractNode.type, SchemaHelper.parseClassName(type.getSimpleName()));
 		return app.create(type, props);
 
 	}

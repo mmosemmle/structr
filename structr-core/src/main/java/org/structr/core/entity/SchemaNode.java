@@ -144,9 +144,10 @@ public class SchemaNode extends AbstractSchemaNode {
 		SchemaHelper.formatImportStatements(this, src, baseType);
 
 		src.append("public class ");
-		src.append(_className);
+		src.append(SchemaHelper.formatClassName(_className));
 		src.append(" extends ");
-		src.append(superClass);
+		
+		src.append((superClass.startsWith("org.structr.dynamic") || "File".equals(superClass)) ? SchemaHelper.formatClassName(superClass) : superClass);
 
 		SchemaHelper.formatInterfacesFromModules(src, this);
 
@@ -200,7 +201,7 @@ public class SchemaNode extends AbstractSchemaNode {
 		// output related node definitions, collect property views
 		for (final SchemaRelationshipNode outRel : getProperty(SchemaNode.relatedTo)) {
 
-			final String propertyName = outRel.getPropertyName(_className, existingPropertyNames, true);
+			final String propertyName = outRel.getPropertyName(SchemaHelper.parseClassName(_className), existingPropertyNames, true);
 
 			//outRel.setProperty(SchemaRelationship.targetJsonName, propertyName);
 
@@ -240,7 +241,7 @@ public class SchemaNode extends AbstractSchemaNode {
 
 			if (!view.isEmpty()) {
 				dynamicViews.add(viewName);
-				SchemaHelper.formatView(src, _className, viewName, viewName, view);
+				SchemaHelper.formatView(src, SchemaHelper.formatClassName(_className), viewName, viewName, view);
 			}
 		}
 
@@ -417,7 +418,7 @@ public class SchemaNode extends AbstractSchemaNode {
 			final Class relatedTypeClass = key.relatedType();
 			if (relatedTypeClass != null) {
 
-				return relatedTypeClass.getSimpleName();
+				return SchemaHelper.formatClassName(relatedTypeClass.getSimpleName());
 			}
 		}
 
@@ -451,7 +452,7 @@ public class SchemaNode extends AbstractSchemaNode {
 	public String getAuxiliarySource() throws FrameworkException {
 
 		// only File needs to return auxiliary code!
-		if (!"File".equals(getClassName())) {
+		if (!"File".equals(SchemaHelper.parseClassName(getClassName()))) {
 			return null;
 		}
 
@@ -460,7 +461,7 @@ public class SchemaNode extends AbstractSchemaNode {
 		final Set<String> propertyNames                        = new LinkedHashSet<>();
 		final Set<Validator> validators                        = new LinkedHashSet<>();
 		final Set<String> enums                                = new LinkedHashSet<>();
-		final String _className                                = getProperty(name);
+		final String _className                                = SchemaHelper.parseClassName(getProperty(name));
 		final ErrorBuffer dummyErrorBuffer                     = new ErrorBuffer();
 
 		// extract properties
@@ -502,9 +503,9 @@ public class SchemaNode extends AbstractSchemaNode {
 
 					final String propertyName = name + "Property";
 
-					src.append("\t\t").append(propertyName).append(".setDeclaringClass(").append(_className).append(".class);\n\n");
-					src.append("\t\tStructrApp.getConfiguration().registerDynamicProperty(").append(_className).append(".class, ").append(propertyName).append(");\n");
-					src.append("\t\tStructrApp.getConfiguration().registerPropertySet(").append(_className).append(".class, PropertyView.Ui, ").append(propertyName).append(");\n\n");
+					src.append("\t\t").append(propertyName).append(".setDeclaringClass(").append("org.structr.web.entity.FileBase").append(".class);\n\n");
+					src.append("\t\tStructrApp.getConfiguration().registerDynamicProperty(").append("org.structr.web.entity.FileBase").append(".class, ").append(propertyName).append(");\n");
+					src.append("\t\tStructrApp.getConfiguration().registerPropertySet(").append("org.structr.web.entity.FileBase").append(".class, PropertyView.Ui, ").append(propertyName).append(");\n\n");
 
 				}
 
@@ -517,7 +518,7 @@ public class SchemaNode extends AbstractSchemaNode {
 							propertyName = propertyName.substring(0, propertyName.length() - 8);
 						}
 
-						src.append("\t\tStructrApp.getConfiguration().registerPropertySet(").append(_className).append(".class, \"").append(viewName).append("\", \"").append(propertyName).append("\");\n\n");
+						src.append("\t\tStructrApp.getConfiguration().registerPropertySet(").append(SchemaHelper.formatClassName(_className)).append(".class, \"").append(viewName).append("\", \"").append(propertyName).append("\");\n\n");
 
 					}
 

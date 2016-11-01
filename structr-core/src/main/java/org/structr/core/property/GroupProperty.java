@@ -37,6 +37,7 @@ import org.structr.core.converter.PropertyConverter;
 import org.structr.core.graph.search.PropertySearchAttribute;
 import org.structr.core.graph.search.SearchAttribute;
 import org.structr.core.graph.search.SearchAttributeGroup;
+import org.structr.schema.SchemaHelper;
 
 /**
  * A property that combines other properties in a nested object.
@@ -212,7 +213,7 @@ public class GroupProperty extends Property<PropertyMap> implements PropertyGrou
 	public void setGroupedProperties(SecurityContext securityContext, PropertyMap source, GraphObject destination) throws FrameworkException {
 
 		if (source.containsKey(nullValuesOnlyProperty)) {
-			throw new FrameworkException(422, "Property " + jsonName + " is read-only", new ReadOnlyPropertyToken(destination.getClass().getSimpleName(), nullValuesOnlyProperty));
+			throw new FrameworkException(422, "Property " + jsonName + " is read-only", new ReadOnlyPropertyToken(SchemaHelper.parseClassName(destination.getClass().getSimpleName()), nullValuesOnlyProperty));
 		}
 
 		if (source.isEmpty()) {
@@ -242,7 +243,7 @@ public class GroupProperty extends Property<PropertyMap> implements PropertyGrou
 
 					logger.warn("Unable to convert grouped property {} on type {}: {}", new Object[] {
 						key.dbName(),
-						source.getClass().getSimpleName(),
+						SchemaHelper.parseClassName(source.getClass().getSimpleName()),
 						fex.getMessage()
 
 					});

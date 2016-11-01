@@ -251,7 +251,7 @@ public class SchemaAttributesInheritanceTest extends FrontendTest {
 			// Create new schema node for dynamic class SubFile which extends File
 			SchemaNode subFile = app.create(SchemaNode.class);
 			subFile.setProperty(SchemaNode.name, "SubFile");
-			subFile.setProperty(SchemaNode.extendsClass, "Image");
+			subFile.setProperty(SchemaNode.extendsClass, "org.structr.web.entity.Image");
 
 			// Add String property "testSubFile" to new dynamic class
 			SchemaProperty testFileProperty = app.create(SchemaProperty.class);

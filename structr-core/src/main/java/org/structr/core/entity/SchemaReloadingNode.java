@@ -81,7 +81,7 @@ public abstract class SchemaReloadingNode extends AbstractNode {
 	}
 
 	public String getClassName() {
-		return getProperty(name);
+		return SchemaHelper.formatClassName(getProperty(name));
 	}
 
 	public String getSuperclassName() {
@@ -89,9 +89,10 @@ public abstract class SchemaReloadingNode extends AbstractNode {
 		final String superclassName = getProperty(SchemaNode.extendsClass);
 		if (superclassName == null) {
 
-			return AbstractNode.class.getSimpleName();
+			return AbstractNode.class.getName();
 		}
 
-		return superclassName.substring(superclassName.lastIndexOf(".")+1);
+		//return superclassName.substring(superclassName.lastIndexOf(".")+1);
+		return superclassName;
 	}
 }

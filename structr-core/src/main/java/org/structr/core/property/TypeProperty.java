@@ -31,6 +31,7 @@ import org.structr.core.graph.NodeFactory;
 import org.structr.core.graph.NodeInterface;
 import org.structr.core.graph.RelationshipFactory;
 import org.structr.core.graph.search.SearchCommand;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -77,7 +78,7 @@ public class TypeProperty extends StringProperty {
 				final String supertypeName = supertype.getName();
 
 				if (supertypeName.startsWith("org.structr.") || supertypeName.startsWith("com.structr.")) {
-					toAdd.add(db.forName(Label.class, supertype.getSimpleName()));
+					toAdd.add(db.forName(Label.class, SchemaHelper.parseClassName(supertype.getSimpleName())));
 				}
 			}
 
@@ -113,7 +114,7 @@ public class TypeProperty extends StringProperty {
 			final String supertypeName = supertype.getName();
 
 			if (supertypeName.startsWith("org.structr.") || supertypeName.startsWith("com.structr.")) {
-				result.add(supertype.getSimpleName());
+				result.add(SchemaHelper.parseClassName(supertype.getSimpleName()));
 			}
 		}
 

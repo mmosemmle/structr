@@ -61,6 +61,7 @@ import org.structr.core.property.PropertyMap;
 import org.structr.module.JarConfigurationProvider;
 import org.structr.rest.service.HttpService;
 import org.structr.rest.servlet.JsonRestServlet;
+import org.structr.schema.SchemaHelper;
 import org.structr.web.auth.UiAuthenticator;
 import org.structr.web.entity.User;
 import org.structr.web.servlet.HtmlServlet;
@@ -115,7 +116,7 @@ public abstract class StructrUiTest {
 		protected void starting(Description description) {
 
 			System.out.println("######################################################################################");
-			System.out.println("# Starting " + getClass().getSimpleName() + "#" + description.getMethodName());
+			System.out.println("# Starting " + description.getClassName() + "#" + description.getMethodName());
 			System.out.println("######################################################################################");
 		}
 
@@ -123,7 +124,7 @@ public abstract class StructrUiTest {
 		protected void finished(Description description) {
 
 			System.out.println("######################################################################################");
-			System.out.println("# Finished " + getClass().getSimpleName() + "#" + description.getMethodName());
+			System.out.println("# Finished " + description.getClassName() + "#" + description.getMethodName());
 			System.out.println("######################################################################################");
 		}
 	};
@@ -156,6 +157,7 @@ public abstract class StructrUiTest {
 		config.setProperty(Services.UDP_PORT, (System.getProperty("udpPort") != null ? System.getProperty("udpPort") : "13466"));
 		config.setProperty(Services.SUPERUSER_USERNAME, "superadmin");
 		config.setProperty(Services.SUPERUSER_PASSWORD, "sehrgeheim");
+		config.setProperty("NodeExtender.log", "true");
 
 		// configure servlets
 		config.setProperty(HttpService.APPLICATION_TITLE, "structr unit test app" + timestamp);
@@ -317,8 +319,8 @@ public abstract class StructrUiTest {
 
 		final PropertyMap props = new PropertyMap();
 
-		props.put(AbstractNode.type, type.getSimpleName());
-		props.put(AbstractNode.name, type.getSimpleName());
+		props.put(AbstractNode.type, SchemaHelper.parseClassName(type.getSimpleName()));
+		props.put(AbstractNode.name, SchemaHelper.parseClassName(type.getSimpleName()));
 
 		for (final NodeAttribute attr : attrs) {
 			props.put(attr.getKey(), attr.getValue());
@@ -330,12 +332,12 @@ public abstract class StructrUiTest {
 	protected <T extends NodeInterface> List<T> createTestNodes(final Class<T> type, final int number) throws FrameworkException {
 
 		final PropertyMap props = new PropertyMap();
-		props.put(AbstractNode.type, type.getSimpleName());
+		props.put(AbstractNode.type, SchemaHelper.parseClassName(type.getSimpleName()));
 
 		List<T> nodes = new LinkedList<>();
 
 		for (int i = 0; i < number; i++) {
-			props.put(AbstractNode.name, type.getSimpleName() + i);
+			props.put(AbstractNode.name, SchemaHelper.parseClassName(type.getSimpleName()) + i);
 			nodes.add(app.create(type, props));
 		}
 

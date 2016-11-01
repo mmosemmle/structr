@@ -67,6 +67,7 @@ import org.structr.dynamic.File;
 import org.structr.files.cmis.config.StructrRepositoryInfo;
 import org.structr.files.cmis.wrapper.CMISTypeDefinitionListWrapper;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 import org.structr.web.entity.Folder;
 
 /**
@@ -454,7 +455,7 @@ public class CMISRepositoryService extends AbstractStructrCmisService implements
 
 	private MutableTypeDefinition extendTypeDefinition(final Class<? extends GraphObject> type, final Boolean includePropertyDefinitions) {
 
-		final String typeName                = type.getSimpleName();
+		final String typeName                = SchemaHelper.parseClassName(type.getSimpleName());
 		MutableTypeDefinition result         = null;
 
 		try {
@@ -544,7 +545,7 @@ public class CMISRepositoryService extends AbstractStructrCmisService implements
 				final String displayName        = propertyId;
 				final String description        = StringUtils.capitalize(propertyId);
 				final Class declaringClass      = key.getDeclaringClass();
-				final boolean isInherited       = !type.getSimpleName().equals(declaringClass.getSimpleName());
+				final boolean isInherited       = !SchemaHelper.parseClassName(type.getSimpleName()).equals(declaringClass.getSimpleName());
 				final Cardinality cardinality   = Cardinality.SINGLE;
 				final Updatability updatability = Updatability.READWRITE;
 				final boolean required          = key.isNotNull();

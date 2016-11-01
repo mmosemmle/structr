@@ -34,6 +34,7 @@ import org.structr.common.error.FrameworkException;
 import org.structr.core.app.StructrApp;
 import org.structr.core.entity.AbstractNode;
 import org.structr.core.graph.search.SearchCommand;
+import org.structr.schema.SchemaHelper;
 
 //~--- classes ----------------------------------------------------------------
 /**
@@ -90,7 +91,7 @@ public class BulkCreateLabelsCommand extends NodeServiceCommand implements Maint
 					final String supertypeName = supertype.getName();
 
 					if (supertypeName.startsWith("org.structr.") || supertypeName.startsWith("com.structr.")) {
-						toAdd.add(graphDb.forName(Label.class, supertype.getSimpleName()));
+						toAdd.add(graphDb.forName(Label.class, SchemaHelper.parseClassName(supertype.getSimpleName())));
 					}
 				}
 

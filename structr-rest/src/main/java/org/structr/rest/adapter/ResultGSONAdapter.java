@@ -36,6 +36,7 @@ import org.structr.core.GraphObject;
 import org.structr.core.Result;
 import org.structr.core.Value;
 import org.structr.rest.GraphObjectGSONAdapter;
+import org.structr.schema.SchemaHelper;
 
 /**
  * Controls deserialization of property sets.
@@ -113,7 +114,7 @@ public class ResultGSONAdapter implements JsonSerializer<Result>, JsonDeserializ
 
 				// FIXME: do we need this check, or does it cause trouble?
 				if (results.size() > 1 && !src.isCollection()){
-					throw new IllegalStateException(src.getClass().getSimpleName() + " is not a collection resource, but result set has size " + results.size());
+					throw new IllegalStateException(SchemaHelper.parseClassName(src.getClass().getSimpleName()) + " is not a collection resource, but result set has size " + results.size());
 				}
 
 				// keep track of serialization time

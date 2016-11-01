@@ -32,6 +32,7 @@ import org.structr.core.entity.AbstractRelationship;
 import org.structr.core.entity.Relation;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
+import org.structr.schema.SchemaHelper;
 
 //~--- classes ----------------------------------------------------------------
 
@@ -70,7 +71,7 @@ public class CreateRelationshipCommand extends NodeServiceCommand {
 		if (newRel != null) {
 
 			newRel.unlockSystemPropertiesOnce();
-			newRel.setProperty(GraphObject.type, relType.getSimpleName());
+			newRel.setProperty(GraphObject.type, SchemaHelper.parseClassName(relType.getSimpleName()));
 
 			// set UUID
 			newRel.unlockSystemPropertiesOnce();

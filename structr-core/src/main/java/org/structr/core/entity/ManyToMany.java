@@ -29,6 +29,7 @@ import org.structr.core.graph.NodeInterface;
 import org.structr.core.graph.RelationshipInterface;
 import org.structr.core.notion.Notion;
 import org.structr.core.notion.RelationshipNotion;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -81,7 +82,7 @@ public abstract class ManyToMany<S extends NodeInterface, T extends NodeInterfac
 
 				if (rel.getTargetNode().equals(targetNode)) {
 
-					throw new FrameworkException(422, "Relationship already exists", new DuplicateRelationshipToken(getClass().getSimpleName(), "Relationship already exists"));
+					throw new FrameworkException(422, "Relationship already exists", new DuplicateRelationshipToken(SchemaHelper.parseClassName(getClass().getSimpleName()), "Relationship already exists"));
 				}
 			}
 		}

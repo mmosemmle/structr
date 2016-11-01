@@ -27,6 +27,7 @@ import org.structr.core.graph.NodeInterface;
 import org.structr.core.graph.RelationshipInterface;
 import org.structr.core.graph.SyncCommand;
 import org.structr.dynamic.File;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -67,7 +68,7 @@ public class SyncableInfo {
 				final RelationshipInterface rel = syncable.getSyncRelationship();
 				this.id           = rel.getUuid();
 				this.name         = rel.getRelType().name();
-				this.type         = rel.getClass().getSimpleName();
+				this.type         = SchemaHelper.parseClassName(rel.getClass().getSimpleName());
 				this.node         = false;
 			}
 		}

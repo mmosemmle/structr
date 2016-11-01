@@ -27,6 +27,7 @@ import org.structr.common.error.FrameworkException;
 import org.structr.common.error.ValueToken;
 import org.structr.core.GraphObject;
 import org.structr.core.converter.PropertyConverter;
+import org.structr.schema.SchemaHelper;
 
 /**
  * A property that stores and retrieves a simple enum value of the given type.
@@ -127,7 +128,7 @@ public class EnumProperty<T extends Enum> extends AbstractPrimitiveProperty<T> {
 
 				} catch (Throwable t) {
 
-					logger.warn("Cannot convert database value {} to enum of type {}, ignoring.", new Object[] { source, enumType.getSimpleName() } );
+					logger.warn("Cannot convert database value {} to enum of type {}, ignoring.", new Object[] { source, SchemaHelper.parseClassName(enumType.getSimpleName()) } );
 				}
 			}
 

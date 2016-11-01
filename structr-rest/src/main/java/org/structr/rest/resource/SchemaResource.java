@@ -157,13 +157,15 @@ public class SchemaResource extends Resource {
 
 			if (type != null) {
 
+				rawType = SchemaHelper.parseClassName(rawType);
+				
 				String url = "/".concat(rawType);
 
 				schema.setProperty(urlProperty, url);
-				schema.setProperty(typeProperty, type.getSimpleName());
-				schema.setProperty(nameProperty, type.getSimpleName());
-				schema.setProperty(classNameProperty, type.getName());
-				schema.setProperty(extendsClassNameProperty, type.getSuperclass().getName());
+				schema.setProperty(typeProperty, SchemaHelper.parseClassName(type.getSimpleName()));
+				schema.setProperty(nameProperty, SchemaHelper.parseClassName(type.getSimpleName()));
+				schema.setProperty(classNameProperty, SchemaHelper.parseClassName(type.getName()));
+				schema.setProperty(extendsClassNameProperty, SchemaHelper.parseClassName(type.getSuperclass().getName()));
 				schema.setProperty(isRelProperty, AbstractRelationship.class.isAssignableFrom(type));
 				schema.setProperty(flagsProperty, SecurityContext.getResourceFlags(rawType));
 
@@ -231,7 +233,7 @@ public class SchemaResource extends Resource {
 
 		map.put(SchemaRelationship.sourceMultiplicity, multiplictyToString(relation.getSourceMultiplicity()));
 		map.put(SchemaRelationship.targetMultiplicity, multiplictyToString(relation.getTargetMultiplicity()));
-		map.put(typeProperty, relation.getClass().getSimpleName());
+		map.put(typeProperty, SchemaHelper.parseClassName(relation.getClass().getSimpleName()));
 		map.put(SchemaRelationship.relationshipType, relation.name());
 
 		final Class sourceType = relation.getSourceType();
@@ -244,7 +246,7 @@ public class SchemaResource extends Resource {
 			map.put(htmlSourceTypesPossibleProperty, true);
 			map.put(possibleSourceTypesProperty, null);
 
-		} else if ("DOMNode".equals(sourceType.getSimpleName())) {
+		} else if ("DOMNode".equals(SchemaHelper.parseClassName(sourceType.getSimpleName()))) {
 
 			map.put(allTargetTypesPossibleProperty, false);
 			map.put(htmlTargetTypesPossibleProperty, true);
@@ -254,7 +256,7 @@ public class SchemaResource extends Resource {
 
 			map.put(allSourceTypesPossibleProperty, false);
 			map.put(htmlSourceTypesPossibleProperty, false);
-			map.put(possibleSourceTypesProperty, StringUtils.join(SearchCommand.getAllSubtypesAsStringSet(sourceType.getSimpleName()), ","));
+			map.put(possibleSourceTypesProperty, StringUtils.join(SearchCommand.getAllSubtypesAsStringSet(SchemaHelper.parseClassName(sourceType.getSimpleName())), ","));
 		}
 
 		// select AbstractNode and SUPERCLASSES (not subclasses!)
@@ -264,7 +266,7 @@ public class SchemaResource extends Resource {
 			map.put(htmlTargetTypesPossibleProperty, true);
 			map.put(possibleTargetTypesProperty, null);
 
-		} else if ("DOMNode".equals(targetType.getSimpleName())) {
+		} else if ("DOMNode".equals(SchemaHelper.parseClassName(targetType.getSimpleName()))) {
 
 			map.put(allTargetTypesPossibleProperty, false);
 			map.put(htmlTargetTypesPossibleProperty, true);
@@ -274,7 +276,7 @@ public class SchemaResource extends Resource {
 
 			map.put(allTargetTypesPossibleProperty, false);
 			map.put(htmlTargetTypesPossibleProperty, false);
-			map.put(possibleTargetTypesProperty, StringUtils.join(SearchCommand.getAllSubtypesAsStringSet(targetType.getSimpleName()), ","));
+			map.put(possibleTargetTypesProperty, StringUtils.join(SearchCommand.getAllSubtypesAsStringSet(SchemaHelper.parseClassName(targetType.getSimpleName())), ","));
 		}
 
 		return map;

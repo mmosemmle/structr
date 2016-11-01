@@ -29,6 +29,7 @@ import org.structr.core.entity.Relation.Cardinality;
 import org.structr.core.entity.SchemaNode;
 import org.structr.core.entity.SchemaRelationshipNode;
 import org.structr.core.entity.relationship.SchemaRelationship;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.json.JsonProperty;
 import org.structr.schema.json.JsonReferenceProperty;
 import org.structr.schema.json.JsonReferenceType;
@@ -349,8 +350,8 @@ public class StructrRelationshipTypeDefinition extends StructrTypeDefinition<Sch
 
 		final SchemaNode sourceNode = schemaNode.getProperty(SchemaRelationshipNode.sourceNode);
 		final SchemaNode targetNode = schemaNode.getProperty(SchemaRelationshipNode.targetNode);
-		final String sourceNodeType = sourceNode.getClassName();
-		final String targetNodeType = targetNode.getClassName();
+		final String sourceNodeType = SchemaHelper.parseClassName(sourceNode.getClassName());
+		final String targetNodeType = SchemaHelper.parseClassName(targetNode.getClassName());
 
 
 		this.sourceType           = root.getId().resolve("definitions/" + sourceNodeType);

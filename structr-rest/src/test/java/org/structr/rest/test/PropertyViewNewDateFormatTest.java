@@ -109,7 +109,7 @@ public class PropertyViewNewDateFormatTest {
 		protected void starting(Description description) {
 
 			System.out.println("######################################################################################");
-			System.out.println("# Starting " + getClass().getSimpleName() + "#" + description.getMethodName());
+			System.out.println("# Starting " + description.getClassName() + "#" + description.getMethodName());
 			System.out.println("######################################################################################");
 		}
 
@@ -117,7 +117,7 @@ public class PropertyViewNewDateFormatTest {
 		protected void finished(Description description) {
 
 			System.out.println("######################################################################################");
-			System.out.println("# Finished " + getClass().getSimpleName() + "#" + description.getMethodName());
+			System.out.println("# Finished " + description.getClassName() + "#" + description.getMethodName());
 			System.out.println("######################################################################################");
 		}
 	};

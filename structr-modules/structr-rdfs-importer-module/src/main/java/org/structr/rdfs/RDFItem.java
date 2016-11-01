@@ -40,6 +40,7 @@ import org.structr.core.app.StructrApp;
 import org.structr.core.converter.PropertyConverter;
 import org.structr.core.property.PropertyKey;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -296,7 +297,7 @@ public abstract class RDFItem<T extends RDFItem> implements Comparable<RDFItem> 
 
 			} else {
 
-				System.out.println("Key " + propertyName + " not found on " + nodeType.getSimpleName());
+				System.out.println("Key " + propertyName + " not found on " + SchemaHelper.parseClassName(nodeType.getSimpleName()));
 			}
 		}
 

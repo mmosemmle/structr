@@ -26,6 +26,7 @@ import org.structr.common.error.FrameworkException;
 import org.structr.core.entity.AbstractNode;
 import org.structr.core.graph.NodeInterface;
 import org.structr.core.graph.SyncCommand;
+import org.structr.schema.SchemaHelper;
 
 /**
  * Serializable data container for a node to be transported over network.
@@ -51,7 +52,7 @@ public class NodeDataContainer extends DataContainer {
 
 		super(sequenceNumber);
 
-		type         = node.getClass().getSimpleName();
+		type         = SchemaHelper.parseClassName(node.getClass().getSimpleName());
 		sourceNodeId = node.getUuid();
 
 		collectProperties(node.getNode(), propertyKeys);

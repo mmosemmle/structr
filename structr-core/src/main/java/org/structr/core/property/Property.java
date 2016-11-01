@@ -44,6 +44,7 @@ import org.structr.core.graph.NodeInterface;
 import org.structr.core.graph.NodeService;
 import org.structr.core.graph.search.PropertySearchAttribute;
 import org.structr.core.graph.search.SearchAttribute;
+import org.structr.schema.SchemaHelper;
 
 /**
  * Abstract base class for all property types.
@@ -415,7 +416,7 @@ public abstract class Property<T> implements PropertyKey<T> {
 
 				} catch (Throwable t) {
 
-					logger.info("Unable to index property with dbName {} and value {} of type {} on {}: {}", new Object[] { dbName, value, this.getClass().getSimpleName(), entity, t } );
+					logger.info("Unable to index property with dbName {} and value {} of type {} on {}: {}", new Object[] { dbName, value, SchemaHelper.parseClassName(this.getClass().getSimpleName()), entity, t } );
 					logger.warn("", t);
 				}
 			}
@@ -439,7 +440,7 @@ public abstract class Property<T> implements PropertyKey<T> {
 
 				} catch (Throwable t) {
 
-					logger.info("Unable to index property with dbName {} and value {} of type {} on {}: {}", new Object[] { dbName, value, this.getClass().getSimpleName(), entity, t } );
+					logger.info("Unable to index property with dbName {} and value {} of type {} on {}: {}", new Object[] { dbName, value, SchemaHelper.parseClassName(this.getClass().getSimpleName()), entity, t } );
 				}
 			}
 		}

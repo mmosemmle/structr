@@ -33,6 +33,7 @@ import org.structr.core.converter.PropertyConverter;
 import org.structr.core.graph.search.ArraySearchAttribute;
 import org.structr.core.graph.search.SearchAttribute;
 import org.structr.core.graph.search.SearchAttributeGroup;
+import org.structr.schema.SchemaHelper;
 
 /**
 * A property that stores and retrieves an array of the given type.
@@ -89,7 +90,7 @@ public class ArrayProperty<T> extends AbstractPrimitiveProperty<T[]> {
 
 	@Override
 	public String typeName() {
-		return componentType.getSimpleName().concat("[]");
+		return SchemaHelper.parseClassName(componentType.getSimpleName()).concat("[]");
 	}
 
 	@Override

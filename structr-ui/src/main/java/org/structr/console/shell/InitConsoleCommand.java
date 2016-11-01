@@ -31,6 +31,7 @@ import org.structr.core.graph.BulkRebuildIndexCommand;
 import org.structr.core.graph.BulkSetUuidCommand;
 import org.structr.core.graph.MaintenanceCommand;
 import org.structr.core.graph.NodeServiceCommand;
+import org.structr.schema.SchemaHelper;
 import org.structr.util.Writable;
 
 /**
@@ -258,7 +259,7 @@ public class InitConsoleCommand extends ConsoleCommand {
 
 				} else {
 
-					writable.println("Cannot execute command '" + command.getClass().getSimpleName() + "', wrong type.");
+					writable.println("Cannot execute command '" + SchemaHelper.parseClassName(command.getClass().getSimpleName()) + "', wrong type.");
 				}
 			}
 

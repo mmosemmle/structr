@@ -23,6 +23,7 @@ import org.structr.common.error.FrameworkException;
 import org.structr.common.error.ReadOnlyPropertyToken;
 import org.structr.core.GraphObject;
 import org.structr.core.converter.PropertyConverter;
+import org.structr.schema.SchemaHelper;
 
 /**
  * Abstract base class for read-only properties.
@@ -68,7 +69,7 @@ public abstract class AbstractReadOnlyProperty<T> extends Property<T> {
 
 	@Override
 	public Object setProperty(SecurityContext securityContext, GraphObject obj, final T value) throws FrameworkException {
-		throw new FrameworkException(422, "Property " + jsonName() + " is read-only", new ReadOnlyPropertyToken(obj.getClass().getSimpleName(), this));
+		throw new FrameworkException(422, "Property " + jsonName() + " is read-only", new ReadOnlyPropertyToken(SchemaHelper.parseClassName(obj.getClass().getSimpleName()), this));
 	}
 
 	@Override

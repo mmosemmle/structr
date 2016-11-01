@@ -56,6 +56,7 @@ import org.structr.files.ftp.FtpService;
 import org.structr.module.JarConfigurationProvider;
 import org.structr.rest.service.HttpService;
 import org.structr.rest.servlet.JsonRestServlet;
+import org.structr.schema.SchemaHelper;
 import org.structr.web.auth.UiAuthenticator;
 import org.structr.web.entity.User;
 import org.structr.web.servlet.HtmlServlet;
@@ -289,12 +290,12 @@ public abstract class StructrUiTest extends TestCase {
 	protected <T extends NodeInterface> List<T> createTestNodes(final Class<T> type, final int number) throws FrameworkException {
 
 		final PropertyMap props = new PropertyMap();
-		props.put(AbstractNode.type, type.getSimpleName());
+		props.put(AbstractNode.type, SchemaHelper.parseClassName(type.getSimpleName()));
 
 		List<T> nodes = new LinkedList<>();
 
 		for (int i = 0; i < number; i++) {
-			props.put(AbstractNode.name, type.getSimpleName() + i);
+			props.put(AbstractNode.name, SchemaHelper.parseClassName(type.getSimpleName()) + i);
 			nodes.add(app.create(type, props));
 		}
 

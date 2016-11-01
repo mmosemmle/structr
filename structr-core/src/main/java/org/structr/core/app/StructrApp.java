@@ -62,6 +62,7 @@ import org.structr.core.graph.search.SearchRelationshipCommand;
 import org.structr.core.property.PropertyMap;
 import org.structr.module.StructrModule;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 
 /**
  * Stateful facade for accessing the Structr core layer.
@@ -97,7 +98,7 @@ public class StructrApp implements App {
 
 		final CreateNodeCommand<T> command = command(CreateNodeCommand.class);
 		final PropertyMap properties       = new PropertyMap(source);
-		String finalType                   = type.getSimpleName();
+		String finalType                   = SchemaHelper.parseClassName(type.getSimpleName());
 
 		// try to identify the actual type from input set (creation wouldn't work otherwise anyway)
 		final String typeFromInput = properties.get(NodeInterface.type);
@@ -107,15 +108,15 @@ public class StructrApp implements App {
 			if (actualType == null) {
 
 				// overwrite type information when creating a node (adhere to type specified by resource!)
-				properties.put(AbstractNode.type, type.getSimpleName());
+				properties.put(AbstractNode.type, finalType);
 
 			} else if (actualType.isInterface()) {
 
-				throw new FrameworkException(422, "Invalid interface type " + type.getSimpleName() + ", please supply a non-interface class name in the type property");
+				throw new FrameworkException(422, "Invalid interface type " + finalType + ", please supply a non-interface class name in the type property");
 
 			} else {
 
-				finalType = actualType.getSimpleName();
+				finalType = SchemaHelper.parseClassName(actualType.getSimpleName());
 			}
 		}
 
@@ -132,7 +133,7 @@ public class StructrApp implements App {
 		final CreateNodeCommand<T> command = command(CreateNodeCommand.class);
 
 		// add type information when creating a node
-		attrs.add(new NodeAttribute(AbstractNode.type, type.getSimpleName()));
+		attrs.add(new NodeAttribute(AbstractNode.type, SchemaHelper.parseClassName(type.getSimpleName())));
 
 		return command.execute(attrs);
 	}
@@ -489,7 +490,7 @@ public class StructrApp implements App {
 
 	private static void registerType(final Class type) {
 
-		final URI id = schemaBaseURI.resolve(URI.create(("definitions/" + type.getSimpleName())));
+		final URI id = schemaBaseURI.resolve(URI.create(("definitions/" + SchemaHelper.parseClassName(type.getSimpleName()))));
 
 		schemaIdMap.put(id, type);
 		typeIdMap.put(type, id);

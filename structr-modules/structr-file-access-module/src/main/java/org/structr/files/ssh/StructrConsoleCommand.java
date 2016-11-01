@@ -44,6 +44,7 @@ import org.structr.console.tabcompletion.TabCompletionResult;
 import org.structr.core.app.App;
 import org.structr.core.app.StructrApp;
 import org.structr.core.graph.Tx;
+import org.structr.schema.SchemaHelper;
 import org.structr.util.Writable;
 import org.structr.web.entity.AbstractFile;
 import org.structr.web.entity.User;

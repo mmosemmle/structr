@@ -34,6 +34,7 @@ import org.structr.core.property.IntProperty;
 import org.structr.core.property.Property;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.StringProperty;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.action.ActionContext;
 import org.structr.schema.action.Function;
 import org.w3c.dom.Document;
@@ -150,7 +151,7 @@ public class ImportGPXFunction extends Function<Object, Object> {
 
 			} else {
 
-				logger.warn("Invalid parameter for GPX import, expected string, got {}", sources[0].getClass().getSimpleName() );
+				logger.warn("Invalid parameter for GPX import, expected string, got {}", SchemaHelper.parseClassName(sources[0].getClass().getSimpleName()) );
 			}
 
 			return "Invalid parameters";
@@ -301,7 +302,7 @@ public class ImportGPXFunction extends Function<Object, Object> {
 			final Class valueType = property.valueType();
 			if (valueType != null) {
 
-				switch (valueType.getSimpleName()) {
+				switch (SchemaHelper.parseClassName(valueType.getSimpleName())) {
 
 					case "Double":
 						storeDouble(child, item, property);

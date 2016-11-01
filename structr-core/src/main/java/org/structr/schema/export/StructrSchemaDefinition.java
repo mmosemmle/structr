@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.structr.common.error.FrameworkException;
 import org.structr.core.app.App;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.json.JsonObjectType;
 import org.structr.schema.json.JsonSchema;
 import org.structr.schema.json.JsonType;
@@ -147,7 +148,7 @@ public class StructrSchemaDefinition implements JsonSchema, StructrDefinition {
 		final URI pointer = id.relativize(uri);
 		if (!pointer.isAbsolute()) {
 
-			final String jsonPointer = pointer.toString();
+			final String jsonPointer = SchemaHelper.parseClassName(pointer.toString());
 			if (jsonPointer.startsWith("#/")) {
 
 				return jsonPointer;
@@ -162,7 +163,7 @@ public class StructrSchemaDefinition implements JsonSchema, StructrDefinition {
 			}
 		}
 
-		return pointer.toString();
+		return SchemaHelper.parseClassName(pointer.toString());
 	}
 
 	// ----- package methods -----

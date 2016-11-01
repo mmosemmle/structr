@@ -39,6 +39,7 @@ import org.structr.core.property.PropertyKey;
 import org.structr.rest.RestMethodResult;
 import org.structr.rest.exception.IllegalMethodException;
 import org.structr.rest.exception.IllegalPathException;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.action.Actions;
 
 /**
@@ -132,7 +133,7 @@ public class SchemaMethodResource extends SortableResource {
 
 		try {
 			final App app               = StructrApp.getInstance();
-			final String typeName       = type.getSimpleName();
+			final String typeName       = SchemaHelper.parseClassName(type.getSimpleName());
 
 			// first step: schema node or one of its parents
 			SchemaNode schemaNode = app.nodeQuery(SchemaNode.class).andName(typeName).getFirst();
@@ -150,13 +151,13 @@ public class SchemaMethodResource extends SortableResource {
 				if (parentType != null) {
 
 					// skip non-dynamic types
-					if (parentType.getSimpleName().equals(typeName) || !parentType.getName().startsWith("org.structr.dynamic.")) {
+					if (SchemaHelper.parseClassName(parentType.getSimpleName()).equals(typeName) || !parentType.getName().startsWith("org.structr.dynamic.")) {
 						parentType = parentType.getSuperclass();
 					}
 
 					if (parentType != null && parentType.getName().startsWith("org.structr.dynamic.")) {
 
-						schemaNode = app.nodeQuery(SchemaNode.class).andName(parentType.getSimpleName()).getFirst();
+						schemaNode = app.nodeQuery(SchemaNode.class).andName(SchemaHelper.parseClassName(parentType.getSimpleName())).getFirst();
 
 					} else {
 

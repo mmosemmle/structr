@@ -47,6 +47,7 @@ import org.structr.core.converter.PropertyConverter;
 import org.structr.core.entity.AbstractNode;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -246,7 +247,7 @@ public abstract class StreamingWriter {
 				// result is an attribute called via REST API
 				if (results.size() > 1 && !result.isCollection()) {
 
-					throw new IllegalStateException(result.getClass().getSimpleName() + " is not a collection resource, but result set has size " + results.size());
+					throw new IllegalStateException(SchemaHelper.parseClassName(result.getClass().getSimpleName()) + " is not a collection resource, but result set has size " + results.size());
 
 				}
 

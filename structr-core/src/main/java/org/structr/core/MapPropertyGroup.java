@@ -26,6 +26,7 @@ import org.structr.common.error.FrameworkException;
 import org.structr.core.converter.PropertyConverter;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
+import org.structr.schema.SchemaHelper;
 
 //~--- classes ----------------------------------------------------------------
 
@@ -65,7 +66,7 @@ public class MapPropertyGroup implements PropertyGroup<PropertyMap> {
 					
 					logger.warn("Unable to convert grouped property {} on type {}: {}", new Object[] {
 						key.dbName(),
-						source.getClass().getSimpleName(),
+						SchemaHelper.parseClassName(source.getClass().getSimpleName()),
 						fex.getMessage()
 						
 					});

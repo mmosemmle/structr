@@ -33,6 +33,7 @@ import org.structr.core.graph.NodeInterface;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
 import org.structr.core.property.RelationProperty;
+import org.structr.schema.SchemaHelper;
 
 //~--- classes ----------------------------------------------------------------
 
@@ -133,7 +134,7 @@ public class TypeAndValueDeserializationStrategy<S, T extends NodeInterface> imp
 
 				} else {
 
-					logger.warn("Unable to create node of type {} for property {}", new Object[] { type.getSimpleName(), propertyKey.jsonName() });
+					logger.warn("Unable to create node of type {} for property {}", new Object[] { SchemaHelper.parseClassName(type.getSimpleName()), propertyKey.jsonName() });
 				}
 
 				break;
@@ -141,9 +142,9 @@ public class TypeAndValueDeserializationStrategy<S, T extends NodeInterface> imp
 			case 1 :
 
 				T obj = result.get(0);
-				//if(!type.getSimpleName().equals(node.getType())) {
+				//if(!SchemaHelper.parseClassName(type.getSimpleName()).equals(node.getType())) {
 				if (!type.isAssignableFrom(obj.getClass())) {
-					throw new FrameworkException(422, "Node type mismatch", new TypeToken(obj.getClass(), propertyKey, type.getSimpleName()));
+					throw new FrameworkException(422, "Node type mismatch", new TypeToken(obj.getClass(), propertyKey, SchemaHelper.parseClassName(type.getSimpleName())));
 				}
 				return obj;
 		}
@@ -153,9 +154,9 @@ public class TypeAndValueDeserializationStrategy<S, T extends NodeInterface> imp
 			PropertyMap attributes = new PropertyMap();
 
 			attributes.put(propertyKey,       convertedSource);
-			attributes.put(AbstractNode.type, type.getSimpleName());
+			attributes.put(AbstractNode.type, SchemaHelper.parseClassName(type.getSimpleName()));
 
-			throw new FrameworkException(404, "No node found for given properties", new PropertiesNotFoundToken(type.getSimpleName(), null, attributes));
+			throw new FrameworkException(404, "No node found for given properties", new PropertiesNotFoundToken(SchemaHelper.parseClassName(type.getSimpleName()), null, attributes));
 		}
 
 		return null;

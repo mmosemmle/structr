@@ -31,6 +31,7 @@ import org.structr.core.property.BooleanProperty;
 import org.structr.core.property.Property;
 import org.structr.core.property.PropertyKey;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 import org.structr.websocket.StructrWebSocket;
 import org.structr.websocket.message.MessageBuilder;
 import org.structr.websocket.message.WebSocketMessage;
@@ -88,7 +89,7 @@ public class ListSchemaPropertiesCommand extends AbstractCommand {
 
 						for (final PropertyKey key : allProperties) {
 
-							final String declaringClass   = key.getDeclaringClass() != null ? key.getDeclaringClass().getSimpleName() : "GraphObject";
+							final String declaringClass   = key.getDeclaringClass() != null ? SchemaHelper.parseClassName(key.getDeclaringClass().getSimpleName()) : "GraphObject";
 							final String propertyName     = key.jsonName();
 							final GraphObjectMap property = new GraphObjectMap();
 							final Class valueType         = key.valueType();
@@ -96,7 +97,7 @@ public class ListSchemaPropertiesCommand extends AbstractCommand {
 							boolean _isDisabled           = false;
 
 							if (valueType != null) {
-								valueTypeName = valueType.getSimpleName();
+								valueTypeName = SchemaHelper.parseClassName(valueType.getSimpleName());
 							}
 
 							// a property is disabled if it is already present in the view of a superclass

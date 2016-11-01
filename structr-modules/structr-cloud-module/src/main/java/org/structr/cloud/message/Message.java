@@ -43,6 +43,7 @@ import org.structr.cloud.sync.Synchronize;
 import org.structr.common.error.FrameworkException;
 import org.structr.core.GraphObject;
 import org.structr.core.graph.SyncCommand;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -114,13 +115,13 @@ public abstract class Message<T> {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + "(" + getId() + ")";
+		return SchemaHelper.parseClassName(getClass().getSimpleName()) + "(" + getId() + ")";
 	}
 
 	public void serialize(final DataOutputStream outputStream) throws IOException {
 
 		// write type
-		final String type = getClass().getSimpleName();
+		final String type = SchemaHelper.parseClassName(getClass().getSimpleName());
 		SyncCommand.serialize(outputStream, type);
 
 		// write ID

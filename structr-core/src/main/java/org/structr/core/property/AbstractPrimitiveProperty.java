@@ -33,6 +33,7 @@ import org.structr.core.entity.Principal;
 import org.structr.core.entity.SuperUser;
 import org.structr.core.graph.CreationContainer;
 import org.structr.core.graph.TransactionCommand;
+import org.structr.schema.SchemaHelper;
 
 
 /**
@@ -94,7 +95,7 @@ public abstract class AbstractPrimitiveProperty<T> extends Property<T> {
 
 					logger.warn("Unable to convert property {} of type {}: {}", new Object[] {
 						dbName(),
-						getClass().getSimpleName(),
+						SchemaHelper.parseClassName(getClass().getSimpleName()),
 						t
 					});
 					logger.warn("", t);

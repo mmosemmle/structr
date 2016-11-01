@@ -172,7 +172,7 @@ public class SchemaTypeResource extends Resource {
 				String url = "/".concat(rawType);
 
 				schema.setProperty(new StringProperty("url"), url);
-				schema.setProperty(new StringProperty("type"), type.getSimpleName());
+				schema.setProperty(new StringProperty("type"), SchemaHelper.parseClassName(type.getSimpleName()));
 				schema.setProperty(new StringProperty("className"), type.getName());
 				schema.setProperty(new StringProperty("extendsClass"), type.getSuperclass().getName());
 				schema.setProperty(new BooleanProperty("isRel"), AbstractRelationship.class.isAssignableFrom(type));

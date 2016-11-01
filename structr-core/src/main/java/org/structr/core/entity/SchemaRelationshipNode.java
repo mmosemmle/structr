@@ -263,7 +263,7 @@ public class SchemaRelationshipNode extends AbstractSchemaNode {
 			final String _targetType = getSchemaNodeTargetType();
 			final String _relType    = SchemaHelper.cleanPropertyName(getRelationshipType());
 
-			name = _sourceType + _relType + _targetType;
+			name = SchemaHelper.parseClassName(_sourceType) + _relType + SchemaHelper.parseClassName(_targetType);
 
 			try {
 				setProperty(AbstractNode.name, name);
@@ -419,11 +419,11 @@ public class SchemaRelationshipNode extends AbstractSchemaNode {
 
 				if ("1".equals(_targetMultiplicity)) {
 
-					propertyName = CaseHelper.toLowerCamelCase(relationshipTypeName) + CaseHelper.toUpperCamelCase(_targetType);
+					propertyName = CaseHelper.toLowerCamelCase(relationshipTypeName) + CaseHelper.toUpperCamelCase(SchemaHelper.parseClassName(_targetType));
 
 				} else {
 
-					propertyName = CaseHelper.plural(CaseHelper.toLowerCamelCase(relationshipTypeName) + CaseHelper.toUpperCamelCase(_targetType));
+					propertyName = CaseHelper.plural(CaseHelper.toLowerCamelCase(relationshipTypeName) + CaseHelper.toUpperCamelCase(SchemaHelper.parseClassName(_targetType)));
 				}
 			}
 
@@ -436,11 +436,11 @@ public class SchemaRelationshipNode extends AbstractSchemaNode {
 
 				if ("1".equals(_sourceMultiplicity)) {
 
-					propertyName = CaseHelper.toLowerCamelCase(_sourceType) + CaseHelper.toUpperCamelCase(relationshipTypeName);
+					propertyName = CaseHelper.toLowerCamelCase(SchemaHelper.parseClassName(_sourceType)) + CaseHelper.toUpperCamelCase(relationshipTypeName);
 
 				} else {
 
-					propertyName = CaseHelper.plural(CaseHelper.toLowerCamelCase(_sourceType) + CaseHelper.toUpperCamelCase(relationshipTypeName));
+					propertyName = CaseHelper.plural(CaseHelper.toLowerCamelCase(SchemaHelper.parseClassName(_sourceType)) + CaseHelper.toUpperCamelCase(relationshipTypeName));
 				}
 			}
 		}
@@ -632,7 +632,7 @@ public class SchemaRelationshipNode extends AbstractSchemaNode {
 		final SchemaNode sourceNode = getSourceNode();
 		if (sourceNode != null) {
 
-			return sourceNode.getProperty(SchemaNode.name);
+			return SchemaHelper.formatClassName(sourceNode.getProperty(SchemaNode.name));
 		}
 
 		return null;
@@ -643,7 +643,7 @@ public class SchemaRelationshipNode extends AbstractSchemaNode {
 		final SchemaNode targetNode = getTargetNode();
 		if (targetNode != null) {
 
-			return targetNode.getProperty(SchemaNode.name);
+			return SchemaHelper.formatClassName(targetNode.getProperty(SchemaNode.name));
 		}
 
 		return null;

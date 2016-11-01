@@ -58,6 +58,7 @@ import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
 import org.structr.core.property.StringProperty;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -366,7 +367,7 @@ public abstract class SchemaImporter extends NodeServiceCommand {
 						final Class propertyType  = propertyEntry.getValue();
 
 						// handle array types differently
-						String propertyTypeName = propertyType.getSimpleName();
+						String propertyTypeName = SchemaHelper.parseClassName(propertyType.getSimpleName());
 						if (propertyType.isArray()) {
 
 							// remove "[]" from the end and append "Array" to match the appropriate parser

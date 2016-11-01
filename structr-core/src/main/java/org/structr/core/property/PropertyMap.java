@@ -438,7 +438,7 @@ public class PropertyMap {
 
 			} else {
 
-				throw new FrameworkException(500, "Invalid property key " + key + " for type " + type.getSimpleName() + " provided.");
+				throw new FrameworkException(500, "Invalid property key " + key + " for type " + SchemaHelper.parseClassName(type.getSimpleName()) + " provided.");
 			}
 		}
 

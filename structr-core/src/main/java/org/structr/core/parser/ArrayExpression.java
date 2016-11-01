@@ -22,6 +22,7 @@ import java.util.Collection;
 import org.apache.commons.collections.CollectionUtils;
 import org.structr.common.error.FrameworkException;
 import org.structr.core.GraphObject;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.action.ActionContext;
 
 /**
@@ -97,7 +98,7 @@ public class ArrayExpression extends Expression {
 
 			} else {
 
-				throw new FrameworkException(422, "Invalid expression: expected collection, found " + value.getClass().getSimpleName() + ".");
+				throw new FrameworkException(422, "Invalid expression: expected collection, found " + SchemaHelper.parseClassName(value.getClass().getSimpleName()) + ".");
 			}
 
 		} else {

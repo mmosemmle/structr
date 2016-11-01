@@ -33,6 +33,7 @@ import org.structr.core.graph.NodeInterface;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
 import org.structr.core.property.RelationProperty;
+import org.structr.schema.SchemaHelper;
 
 /**
  * Deserializes a {@link GraphObject} using the UUID property.
@@ -90,7 +91,7 @@ public class IdDeserializationStrategy<S, T extends NodeInterface> implements De
 					relatedNode = (T) app.getNodeById(map.get(GraphObject.id));
 
 					if (relatedNode != null && !type.isAssignableFrom(relatedNode.getClass())) {
-						throw new FrameworkException(422, "Node type mismatch", new TypeToken(type.getSimpleName(), null, type.getSimpleName()));
+						throw new FrameworkException(422, "Node type mismatch", new TypeToken(SchemaHelper.parseClassName(type.getSimpleName()), null, SchemaHelper.parseClassName(type.getSimpleName())));
 					}
 
 				} else {
@@ -125,7 +126,7 @@ public class IdDeserializationStrategy<S, T extends NodeInterface> implements De
 								// more than one => not unique??
 								throw new FrameworkException(422, concat(
 									"Unable to resolve related node of type ",
-									type.getSimpleName(),
+									SchemaHelper.parseClassName(type.getSimpleName()),
 									", ambiguous result: found ",
 									num,
 									" nodes for the given property set."
@@ -154,7 +155,7 @@ public class IdDeserializationStrategy<S, T extends NodeInterface> implements De
 
 							throw new FrameworkException(422, concat(
 								"Cannot create ", relation.getOtherType(type).getSimpleName(),
-								": no matching ", type.getSimpleName(),
+								": no matching ", SchemaHelper.parseClassName(type.getSimpleName()),
 								" found for the given property set",
 								" and autoCreate has a value of ",
 								relationProperty.getAutocreateFlagName()
@@ -166,7 +167,7 @@ public class IdDeserializationStrategy<S, T extends NodeInterface> implements De
 					// FIXME: when can the relationProperty be null at all?
 					throw new FrameworkException(500, concat(
 						"Unable to resolve related node of type ",
-						type.getSimpleName(),
+						SchemaHelper.parseClassName(type.getSimpleName()),
 						", no relation defined."
 					));
 
@@ -185,7 +186,7 @@ public class IdDeserializationStrategy<S, T extends NodeInterface> implements De
 				final GraphObject obj = app.getNodeById(source.toString());
 
 				if (obj != null && !type.isAssignableFrom(obj.getClass())) {
-					throw new FrameworkException(422, "Node type mismatch", new TypeToken(type.getSimpleName(), null, type.getSimpleName()));
+					throw new FrameworkException(422, "Node type mismatch", new TypeToken(SchemaHelper.parseClassName(type.getSimpleName()), null, SchemaHelper.parseClassName(type.getSimpleName())));
 				}
 
 				return (T) obj;

@@ -60,6 +60,7 @@ import org.structr.rest.service.HttpServiceServlet;
 import org.structr.rest.service.StructrHttpServiceConfig;
 import org.structr.web.auth.UiAuthenticator;
 import org.structr.rest.common.HttpHelper;
+import org.structr.schema.SchemaHelper;
 import org.structr.web.entity.User;
 import org.structr.web.entity.dom.Page;
 
@@ -148,7 +149,7 @@ public class ProxyServlet extends HttpServlet implements HttpServiceServlet {
 
 		if (auth == null) {
 			
-			final String errorMessage = "No authenticator class found. Check log for 'Missing authenticator key " + this.getClass().getSimpleName() + ".authenticator'";
+			final String errorMessage = "No authenticator class found. Check log for 'Missing authenticator key " + SchemaHelper.parseClassName(this.getClass().getSimpleName()) + ".authenticator'";
 			logger.error(errorMessage);
 			
 			try {

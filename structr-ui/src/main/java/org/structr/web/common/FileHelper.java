@@ -49,6 +49,7 @@ import org.structr.core.app.StructrApp;
 import org.structr.core.entity.AbstractNode;
 import org.structr.core.entity.LinkedTreeNode;
 import org.structr.core.property.PropertyMap;
+import org.structr.schema.SchemaHelper;
 import org.structr.util.Base64;
 import org.structr.web.entity.AbstractFile;
 import org.structr.web.entity.FileBase;
@@ -85,7 +86,7 @@ public class FileHelper {
 		if (existingFile != null) {
 
 			existingFile.unlockSystemPropertiesOnce();
-			existingFile.setProperty(AbstractNode.type, fileType == null ? org.structr.dynamic.File.class.getSimpleName() : fileType.getSimpleName());
+			existingFile.setProperty(AbstractNode.type, fileType == null ? org.structr.dynamic.File.class.getSimpleName() : SchemaHelper.parseClassName(fileType.getSimpleName()));
 
 			existingFile = getFileByUuid(securityContext, uuid);
 

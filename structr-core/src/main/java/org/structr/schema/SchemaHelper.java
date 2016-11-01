@@ -102,7 +102,8 @@ public class SchemaHelper {
 
 	private static final Logger logger = LoggerFactory.getLogger(SchemaHelper.class.getName());
 
-	private static final String WORD_SEPARATOR = "_";
+	private static final String WORD_SEPARATOR    = "_";
+	private static final String CLASS_NAME_SUFFIX = "____StructrDynamicSchemaClass";
 
 	public enum Type {
 
@@ -220,11 +221,11 @@ public class SchemaHelper {
 	public static Class getEntityClassForRawType(final String rawType) {
 
 		// first try: raw name
-		Class type = getEntityClassForRawType(rawType, false);
+		Class type = getEntityClassForRawType(SchemaHelper.parseClassName(rawType), false);
 		if (type == null) {
 
 			// second try: normalized name
-			type = getEntityClassForRawType(rawType, true);
+			type = getEntityClassForRawType(SchemaHelper.parseClassName(rawType), true);
 		}
 
 		return type;
@@ -250,7 +251,7 @@ public class SchemaHelper {
 
 		// store type but only if it exists!
 		if (type != null) {
-			normalizedEntityNameCache.put(rawType, type.getSimpleName());
+			normalizedEntityNameCache.put(rawType, SchemaHelper.parseClassName(type.getSimpleName()));
 		}
 
 		// fallback to support generic queries on all types
@@ -898,6 +899,14 @@ public class SchemaHelper {
 		return propertyName.replaceAll("[^\\w]+", "");
 	}
 
+	public static String formatClassName(final String className) {
+		return !className.endsWith(CLASS_NAME_SUFFIX) ? className.concat(CLASS_NAME_SUFFIX) : className;
+	}
+	
+	public static String parseClassName(final String className) {
+		return StringUtils.substringBefore(className, CLASS_NAME_SUFFIX);
+	}
+	
 	public static void formatValidators(final StringBuilder src, final Set<Validator> validators) {
 
 		if (!validators.isEmpty()) {
@@ -1074,7 +1083,7 @@ public class SchemaHelper {
 
 		final Class declaringClass = property.getDeclaringClass();
 
-		map.put("declaringClass", declaringClass.getSimpleName());
+		map.put("declaringClass", SchemaHelper.parseClassName(declaringClass.getSimpleName()));
 		map.put("defaultValue", property.defaultValue());
 		if (property instanceof StringProperty) {
 			map.put("contentType", ((StringProperty) property).contentType());
@@ -1092,8 +1101,8 @@ public class SchemaHelper {
 		if (relatedType != null) {
 
 			map.put("relatedType", relatedType.getName());
-			map.put("type", relatedType.getSimpleName());
-			map.put("uiType", relatedType.getSimpleName() + (property.isCollection() ? "[]" : ""));
+			map.put("type", SchemaHelper.parseClassName(relatedType.getSimpleName()));
+			map.put("uiType", SchemaHelper.parseClassName(relatedType.getSimpleName()) + (property.isCollection() ? "[]" : ""));
 
 		} else {
 

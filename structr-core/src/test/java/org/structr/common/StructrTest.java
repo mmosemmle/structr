@@ -58,6 +58,7 @@ import org.structr.core.graph.NodeInterface;
 import org.structr.core.graph.Tx;
 import org.structr.core.property.PropertyMap;
 import org.structr.module.JarConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -77,7 +78,7 @@ public class StructrTest {
 		protected void starting(Description description) {
 
 			System.out.println("######################################################################################");
-			System.out.println("# Starting " + getClass().getSimpleName() + "#" + description.getMethodName());
+			System.out.println("# Starting " + description.getClassName() + "#" + description.getMethodName());
 			System.out.println("######################################################################################");
 		}
 
@@ -85,7 +86,7 @@ public class StructrTest {
 		protected void finished(Description description) {
 
 			System.out.println("######################################################################################");
-			System.out.println("# Finished " + getClass().getSimpleName() + "#" + description.getMethodName());
+			System.out.println("# Finished " + description.getClassName() + "#" + description.getMethodName());
 			System.out.println("######################################################################################");
 		}
 	};
@@ -141,6 +142,7 @@ public class StructrTest {
 		config.setProperty(Services.UDP_PORT, (System.getProperty("udpPort") != null ? System.getProperty("udpPort") : "13466"));
 		config.setProperty(Services.SUPERUSER_USERNAME, "superadmin");
 		config.setProperty(Services.SUPERUSER_PASSWORD, "sehrgeheim");
+		//config.setProperty("NodeExtender.log", "true");
 
 		if (additionalConfig != null) {
 			config.putAll(additionalConfig);
@@ -271,7 +273,7 @@ public class StructrTest {
 
 	protected <T extends AbstractNode> T createTestNode(final Class<T> type, final PropertyMap props) throws FrameworkException {
 
-		props.put(AbstractNode.type, type.getSimpleName());
+		props.put(AbstractNode.type, SchemaHelper.parseClassName(type.getSimpleName()));
 
 		try (final Tx tx = app.tx()) {
 

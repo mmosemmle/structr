@@ -40,6 +40,7 @@ import org.structr.core.entity.SchemaProperty;
 import org.structr.core.entity.SchemaRelationshipNode;
 import org.structr.core.entity.SchemaView;
 import org.structr.core.graph.NodeAttribute;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.json.JsonBooleanProperty;
 import org.structr.schema.json.JsonDateProperty;
 import org.structr.schema.json.JsonEnumProperty;
@@ -676,7 +677,7 @@ public abstract class StructrTypeDefinition<T extends AbstractSchemaNode> implem
 
 	static StructrTypeDefinition deserialize(final StructrSchemaDefinition root, final SchemaNode schemaNode) {
 
-		final StructrNodeTypeDefinition def = new StructrNodeTypeDefinition(root, schemaNode.getClassName());
+		final StructrNodeTypeDefinition def = new StructrNodeTypeDefinition(root, SchemaHelper.parseClassName(schemaNode.getClassName()));
 		def.deserialize(schemaNode);
 
 		return def;
@@ -706,7 +707,7 @@ public abstract class StructrTypeDefinition<T extends AbstractSchemaNode> implem
 				final Class type = StructrApp.resolveSchemaId(uri);
 				if (type != null) {
 
-					return app.nodeQuery(SchemaNode.class).andName(type.getSimpleName()).getFirst();
+					return app.nodeQuery(SchemaNode.class).andName(SchemaHelper.parseClassName(type.getSimpleName())).getFirst();
 				}
 			}
 		}

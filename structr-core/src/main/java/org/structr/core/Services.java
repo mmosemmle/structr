@@ -56,6 +56,7 @@ import org.structr.core.app.StructrApp;
 import org.structr.core.graph.NodeService;
 import org.structr.module.JarConfigurationProvider;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 
 //~--- classes ----------------------------------------------------------------
 
@@ -194,7 +195,7 @@ public class Services implements StructrServices {
 
 			serviceClass = command.getServiceClass();
 
-			if ((serviceClass != null) && configuredServiceClasses.contains(serviceClass.getSimpleName())) {
+			if ((serviceClass != null) && configuredServiceClasses.contains(SchemaHelper.parseClassName(serviceClass.getSimpleName()))) {
 
 				// search for already running service..
 				Service service = serviceCache.get(serviceClass);
@@ -579,14 +580,14 @@ public class Services implements StructrServices {
 
 			if (service.isVital()) {
 
-				logger.error("Vital service {} failed to start. Aborting", service.getClass().getSimpleName());
+				logger.error("Vital service {} failed to start. Aborting", SchemaHelper.parseClassName(service.getClass().getSimpleName()));
 
 				// hard(est) exit
 				System.exit(1);
 
 			} else {
 
-				logger.error("Service {} failed to start", service.getClass().getSimpleName());
+				logger.error("Service {} failed to start", SchemaHelper.parseClassName(service.getClass().getSimpleName()));
 			}
 		}
 

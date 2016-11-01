@@ -29,6 +29,7 @@ import org.structr.core.app.App;
 import org.structr.core.entity.AbstractSchemaNode;
 import org.structr.core.entity.SchemaNode;
 import org.structr.core.entity.SchemaRelationshipNode;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.json.JsonObjectType;
 import org.structr.schema.json.JsonType;
 
@@ -150,7 +151,7 @@ public class StructrTypeDefinitions implements StructrDefinition {
 
 			} else {
 
-				throw new IllegalStateException("Invalid JSON object for " + name + ", expected object, got " + value.getClass().getSimpleName());
+				throw new IllegalStateException("Invalid JSON object for " + name + ", expected object, got " + SchemaHelper.parseClassName(value.getClass().getSimpleName()));
 			}
 		}
 

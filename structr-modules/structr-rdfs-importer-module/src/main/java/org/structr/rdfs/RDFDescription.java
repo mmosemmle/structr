@@ -33,6 +33,7 @@ import org.structr.core.converter.PropertyConverter;
 import org.structr.core.graph.NodeInterface;
 import org.structr.core.property.PropertyKey;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -83,7 +84,7 @@ public class RDFDescription extends RDFItem<RDFDescription> {
 						if (key == null) {
 
 							// property key not found, try inverse
-							final OWLClass owlClass = owlClassesByName.get(type.getSimpleName());
+							final OWLClass owlClass = owlClassesByName.get(SchemaHelper.parseClassName(type.getSimpleName()));
 							if (owlClass != null) {
 
 								final OWLClass inverse = owlClass.getInverse();
@@ -110,7 +111,7 @@ public class RDFDescription extends RDFItem<RDFDescription> {
 
 						} else {
 
-							System.out.println("Description: no property key found for " + keyName + " of " + type.getSimpleName());
+							System.out.println("Description: no property key found for " + keyName + " of " + SchemaHelper.parseClassName(type.getSimpleName()));
 						}
 
 					} catch (Throwable t) {

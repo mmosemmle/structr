@@ -61,6 +61,7 @@ import org.structr.core.graph.Tx;
 import org.structr.core.property.ArrayProperty;
 import org.structr.core.property.PropertyKey;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.export.StructrSchema;
 import org.structr.schema.json.JsonDateProperty;
 import org.structr.schema.json.JsonEnumProperty;
@@ -597,7 +598,7 @@ public class OWLParserv2 {
 										// create schema relationship from schema type to file (once)
 										// import file
 										// link file
-										final SchemaNode schemaNode = app.nodeQuery(SchemaNode.class).andName(type.getSimpleName()).getFirst();
+										final SchemaNode schemaNode = app.nodeQuery(SchemaNode.class).andName(SchemaHelper.parseClassName(type.getSimpleName())).getFirst();
 										if (schemaNode != null) {
 
 											System.out.println("                ##########: found SchemaNode " + schemaNode.getUuid() + " (" + schemaNode.getName() + ")");
@@ -607,7 +608,7 @@ public class OWLParserv2 {
 
 												final String capitalJsonName = StringUtils.capitalize(key.jsonName());
 												final String targetJsonName  = "has" + capitalJsonName;
-												final String sourceJsonName  = "is" + capitalJsonName + "Of" + type.getSimpleName();
+												final String sourceJsonName  = "is" + capitalJsonName + "Of" + SchemaHelper.parseClassName(type.getSimpleName());
 
 												final SchemaRelationshipNode link = app.nodeQuery(SchemaRelationshipNode.class)
 													.and(SchemaRelationshipNode.sourceNode, schemaNode)
@@ -641,7 +642,7 @@ public class OWLParserv2 {
 
 										} else {
 
-											System.out.println("NO SchemaNode found for type " + type.getSimpleName() + "!");
+											System.out.println("NO SchemaNode found for type " + SchemaHelper.parseClassName(type.getSimpleName()) + "!");
 										}
 
 										// no need to search further
@@ -748,8 +749,8 @@ public class OWLParserv2 {
 
 											} else {
 
-												System.out.println("############################# INVALID KEY " + type.getSimpleName() + "." + targetJsonName + ", not found??!");
-												logger.println("############################# INVALID KEY " + type.getSimpleName() + "." + targetJsonName + ", not found??!");
+												System.out.println("############################# INVALID KEY " + SchemaHelper.parseClassName(type.getSimpleName()) + "." + targetJsonName + ", not found??!");
+												logger.println("############################# INVALID KEY " + SchemaHelper.parseClassName(type.getSimpleName()) + "." + targetJsonName + ", not found??!");
 											}
 
 											found = true;

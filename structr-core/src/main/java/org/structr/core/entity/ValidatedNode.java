@@ -22,6 +22,7 @@ import org.structr.common.error.EmptyPropertyToken;
 import org.structr.common.error.ErrorBuffer;
 import org.structr.common.error.NullPropertyToken;
 import org.structr.core.property.Property;
+import org.structr.schema.SchemaHelper;
 
 /**
  * A node with validation. This is a convenience class that avoids having to
@@ -38,12 +39,12 @@ public abstract class ValidatedNode extends AbstractNode {
 
 		if (value == null) {
 
-			errorBuffer.add(new NullPropertyToken(getClass().getSimpleName(), property));
+			errorBuffer.add(new NullPropertyToken(SchemaHelper.parseClassName(getClass().getSimpleName()), property));
 			valid = false;
 
 		} else if (value.isEmpty()) {
 
-			errorBuffer.add(new EmptyPropertyToken(getClass().getSimpleName(), property));
+			errorBuffer.add(new EmptyPropertyToken(SchemaHelper.parseClassName(getClass().getSimpleName()), property));
 			valid = false;
 		}
 
@@ -57,7 +58,7 @@ public abstract class ValidatedNode extends AbstractNode {
 
 		if (value == null) {
 
-			errorBuffer.add(new EmptyPropertyToken(getClass().getSimpleName(), property));
+			errorBuffer.add(new EmptyPropertyToken(SchemaHelper.parseClassName(getClass().getSimpleName()), property));
 			valid = false;
 		}
 

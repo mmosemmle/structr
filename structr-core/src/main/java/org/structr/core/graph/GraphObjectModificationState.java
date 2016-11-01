@@ -40,6 +40,7 @@ import org.structr.core.entity.AbstractNode;
 import org.structr.core.entity.Principal;
 import org.structr.core.property.PropertyKey;
 import org.structr.core.property.PropertyMap;
+import org.structr.schema.SchemaHelper;
 
 /**
  *
@@ -106,7 +107,7 @@ public class GraphObjectModificationState implements ModificationEvent {
 
 	@Override
 	public String toString() {
-		return object.getClass().getSimpleName() + "(" + object + "); " + status;
+		return SchemaHelper.parseClassName(object.getClass().getSimpleName()) + "(" + object + "); " + status;
 	}
 
 	@Override

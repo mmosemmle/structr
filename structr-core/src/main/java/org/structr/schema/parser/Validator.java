@@ -34,7 +34,7 @@ public class Validator {
 	public Validator(final String validator, final String className, final String propertyName) {
 
 		this.validator    = validator;
-		this.className    = className;
+		this.className    = SchemaHelper.formatClassName(className);
 		this.propertyName = propertyName;
 	}
 

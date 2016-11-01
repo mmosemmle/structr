@@ -70,6 +70,7 @@ import org.structr.core.property.SourceNodeProperty;
 import org.structr.core.property.TargetId;
 import org.structr.core.property.TargetNodeProperty;
 import org.structr.core.script.Scripting;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.action.ActionContext;
 import org.structr.schema.action.Function;
 
@@ -348,7 +349,7 @@ public abstract class AbstractRelationship<S extends NodeInterface, T extends No
 				} catch(FrameworkException fex) {
 					logger.warn("Unable to convert property {} of type {}: {}", new Object[] {
 						key.dbName(),
-						getClass().getSimpleName(),
+						SchemaHelper.parseClassName(getClass().getSimpleName()),
 						fex.getMessage()
 					});
 				}
@@ -556,7 +557,7 @@ public abstract class AbstractRelationship<S extends NodeInterface, T extends No
 
 			logger.error("Tried to set property with null key (action was denied)");
 
-			throw new FrameworkException(422, "Tried to set property with null key (action was denied)", new NullArgumentToken(getClass().getSimpleName(), base));
+			throw new FrameworkException(422, "Tried to set property with null key (action was denied)", new NullArgumentToken(SchemaHelper.parseClassName(getClass().getSimpleName()), base));
 
 		}
 
@@ -567,14 +568,14 @@ public abstract class AbstractRelationship<S extends NodeInterface, T extends No
 				// check for system properties
 				if (key.isSystemInternal() && !internalSystemPropertiesUnlocked) {
 
-					throw new FrameworkException(422, "Property " + key.jsonName() + " is an internal system property", new InternalSystemPropertyToken(getClass().getSimpleName(), key));
+					throw new FrameworkException(422, "Property " + key.jsonName() + " is an internal system property", new InternalSystemPropertyToken(SchemaHelper.parseClassName(getClass().getSimpleName()), key));
 
 				}
 
 				// check for read-only properties
 				if ((key.isReadOnly() || key.isWriteOnce()) && !readOnlyPropertiesUnlocked && !securityContext.isSuperUser()) {
 
-					throw new FrameworkException(422, "Property " + key.jsonName() + " is read-only", new ReadOnlyPropertyToken(getClass().getSimpleName(), key));
+					throw new FrameworkException(422, "Property " + key.jsonName() + " is read-only", new ReadOnlyPropertyToken(SchemaHelper.parseClassName(getClass().getSimpleName()), key));
 
 				}
 
@@ -650,7 +651,7 @@ public abstract class AbstractRelationship<S extends NodeInterface, T extends No
 		final NodeInterface endNode      = getTargetNode();
 		final Class relationType         = getClass();
 		final PropertyMap _props         = getProperties();
-		final String type                = this.getClass().getSimpleName();
+		final String type                = SchemaHelper.parseClassName(this.getClass().getSimpleName());
 
 		if (newStartNode == null) {
 			throw new FrameworkException(404, "Node with ID " + sourceNodeId + " not found", new IdNotFoundToken(type, sourceNodeId));
@@ -677,7 +678,7 @@ public abstract class AbstractRelationship<S extends NodeInterface, T extends No
 		final NodeInterface startNode     = getSourceNode();
 		final Class relationType          = getClass();
 		final PropertyMap _props          = getProperties();
-		final String type                 = this.getClass().getSimpleName();
+		final String type                 = SchemaHelper.parseClassName(this.getClass().getSimpleName());
 
 		if (newTargetNode == null) {
 			throw new FrameworkException(404, "Node with ID " + targetNodeId + " not found", new IdNotFoundToken(type, targetNodeId));

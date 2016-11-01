@@ -64,7 +64,7 @@ public class BulkFixNodePropertiesCommand extends NodeServiceCommand implements 
 
 				if (type != null) {
 
-					logger.info("Trying to fix properties of all {} nodes", type.getSimpleName() );
+					logger.info("Trying to fix properties of all {} nodes", SchemaHelper.parseClassName(type.getSimpleName()) );
 
 					long nodeCount = bulkGraphOperation(securityContext, nodeIterator, 100, "FixNodeProperties", new BulkGraphOperation<AbstractNode>() {
 
@@ -99,7 +99,7 @@ public class BulkFixNodePropertiesCommand extends NodeServiceCommand implements 
 
 												logger.warn("Unable to fix property {} of {} with UUID {} which is of type {}", new Object[] {
 													propertyToFix.dbName(),
-													type.getSimpleName(),
+													SchemaHelper.parseClassName(type.getSimpleName()),
 													node.getUuid(),
 													databaseValue != null ? databaseValue.getClass() : "null"
 												});

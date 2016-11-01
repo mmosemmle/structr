@@ -104,7 +104,7 @@ public class CreateNodeCommand<T extends NodeInterface> extends NodeServiceComma
 
 			// use property keys to set property values on creation dummy
 			GraphObject.id.setProperty(securityContext, tmp, uuid);
-			GraphObject.type.setProperty(securityContext, tmp, nodeType.getSimpleName());
+			GraphObject.type.setProperty(securityContext, tmp, SchemaHelper.parseClassName(nodeType.getSimpleName()));
 			AbstractNode.createdDate.setProperty(securityContext, tmp, now);
 			AbstractNode.lastModifiedDate.setProperty(securityContext, tmp, now);
 

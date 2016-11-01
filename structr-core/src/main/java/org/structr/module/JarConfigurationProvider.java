@@ -61,6 +61,7 @@ import org.structr.core.graph.RelationshipInterface;
 import org.structr.core.property.GenericProperty;
 import org.structr.core.property.PropertyKey;
 import org.structr.schema.ConfigurationProvider;
+import org.structr.schema.SchemaHelper;
 import org.structr.schema.SchemaService;
 
 //~--- classes ----------------------------------------------------------------
@@ -165,7 +166,7 @@ public class JarConfigurationProvider implements ConfigurationProvider {
 
 			synchronized (SchemaService.class) {
 
-				nodeEntityClass = nodeEntityClassCache.get(simpleName);
+				nodeEntityClass = nodeEntityClassCache.get(SchemaHelper.parseClassName(simpleName));
 
 				if (nodeEntityClass == null) {
 
@@ -179,7 +180,7 @@ public class JarConfigurationProvider implements ConfigurationProvider {
 
 								if (!Modifier.isAbstract(nodeClass.getModifiers())) {
 
-									nodeEntityClassCache.put(simpleName, nodeClass);
+									nodeEntityClassCache.put(SchemaHelper.parseClassName(simpleName), nodeClass);
 									nodeEntityClass = nodeClass;
 
 									// first match wins
@@ -494,7 +495,7 @@ public class JarConfigurationProvider implements ConfigurationProvider {
 
 		synchronized (SchemaService.class) {
 
-			final String simpleName = oldType.getSimpleName();
+			final String simpleName = SchemaHelper.parseClassName(oldType.getSimpleName());
 			final String fqcn       = oldType.getName();
 
 			nodeEntityClassCache.remove(simpleName);
@@ -527,11 +528,11 @@ public class JarConfigurationProvider implements ConfigurationProvider {
 
 		// moved here from scanEntity, no reason to have this in a separate
 		// method requiring two different calls instead of one
-		String simpleName = type.getSimpleName();
+		String simpleName = SchemaHelper.parseClassName(type.getSimpleName());
 		String fqcn       = type.getName();
 
 		if (AbstractNode.class.isAssignableFrom(type)) {
-			nodeEntityClassCache.put(simpleName, type);
+			nodeEntityClassCache.put(SchemaHelper.parseClassName(simpleName), type);
 			nodeEntityPackages.add(fqcn.substring(0, fqcn.lastIndexOf(".")));
 			globalPropertyViewMap.remove(fqcn);
 		}
