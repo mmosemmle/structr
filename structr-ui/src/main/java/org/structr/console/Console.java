@@ -239,14 +239,15 @@ public class Console {
 		writable.println();
 		writable.println();
 
-		if (size <= 10) {
+		// disabled limit. TODO: Find a better way to handle long running or very large result sets to avoid crashing or making the console unresponsive
+		//if (size <= 10) {
 
 			writable.print(Functions.get("to_json").apply(actionContext, null, new Object[] { result } ));
 
-		} else {
+		//} else {
 
-			writable.print("Too many results (> 10), please use LIMIT to reduce the result count of your Cypher query.");
-		}
+		//	writable.print("Too many results (> 10), please use LIMIT to reduce the result count of your Cypher query.");
+		//}
 
 		writable.println();
 	}

@@ -390,7 +390,7 @@ public abstract class SchemaImporter extends NodeServiceCommand {
 					} else if (!typeInfo.getOtherTypes().isEmpty()) {
 
 						// only the first supertype is supported
-						propertyMap.put(SchemaNode.extendsClass, typeInfo.getSuperclass(reducedTypeInfoMap));
+						propertyMap.put(SchemaNode.extendsClass, "org.structr.dynamic." + typeInfo.getSuperclass(reducedTypeInfoMap));
 					}
 
 					final SchemaNode existingNode = app.nodeQuery(SchemaNode.class).andName(type).getFirst();

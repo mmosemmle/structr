@@ -135,23 +135,23 @@ public class RDFImporter extends SchemaImporter implements MaintenanceCommand {
 
 		for (final Entry<String, RdfClass> entry : classes.entrySet()) {
 
-			final Set<String> superclasses = new LinkedHashSet<>();
-			final String id                = entry.getKey();
-			final RdfClass rdfClass        = entry.getValue();
-
-			superclasses.add(rdfClass.name);
+			final Set<RdfClass> superclasses = new LinkedHashSet<>();
+			final String name                = entry.getKey();
+			final RdfClass rdfClass          = entry.getValue();
 
 			for (final HasSubclassRelationship rel : subclasses) {
 
-				if (rel.child.equals(id)) {
-					superclasses.add(classes.get(rel.parent).id);
+				if (rel.child.name.equals(name) && !rdfClass.name.equals(rel.parent.name)) {
+					superclasses.add(rel.parent);
 				}
 			}
 
 			cypher.append("CREATE (").append(rdfClass.id.replaceAll("[\\W_]+", ""));
 
-			for (final String cl : superclasses) {
-				cypher.append(":").append(rdfClass.type);
+			cypher.append(":").append(rdfClass.type);
+			
+			for (final RdfClass superclass : superclasses) {
+				cypher.append(":").append(superclass.type);
 			}
 
 			cypher.append(" { ");
@@ -203,7 +203,7 @@ public class RDFImporter extends SchemaImporter implements MaintenanceCommand {
 			if ("rdfs:subClassOf".equals(type)) {
 
 				final String parent = handleSubclass(classes, node);
-				subclasses.add(new HasSubclassRelationship(parent, rawName));
+				subclasses.add(new HasSubclassRelationship(new RdfClass(parent), new RdfClass(rawName)));
 			}
 		}
 	}
@@ -304,17 +304,17 @@ public class RDFImporter extends SchemaImporter implements MaintenanceCommand {
 
 	private static class HasSubclassRelationship {
 
-		public String parent = null;
-		public String child  = null;
+		public RdfClass parent = null;
+		public RdfClass child  = null;
 
-		public HasSubclassRelationship(final String parent, final String child) {
+		public HasSubclassRelationship(final RdfClass parent, final RdfClass child) {
 			this.parent = parent;
 			this.child  = child;
 		}
 
 		@Override
 		public String toString() {
-			return parent + "->" + child;
+			return parent.name + "->" + child.name;
 		}
 	}
 
@@ -324,6 +324,10 @@ public class RDFImporter extends SchemaImporter implements MaintenanceCommand {
 		public String name    = null;
 		public String id      = null;
 		public String type    = null;
+
+		public RdfClass(final String rawAttribueValue) {
+			this(rawAttribueValue, null);
+		}
 
 		public RdfClass(final String rawAttribueValue, final String comment) {
 

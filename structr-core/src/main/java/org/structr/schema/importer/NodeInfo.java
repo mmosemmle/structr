@@ -18,10 +18,8 @@
  */
 package org.structr.schema.importer;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
@@ -98,15 +96,9 @@ public class NodeInfo {
 	private void extractTypes(final Node node) {
 
 		// first try: labels
-		// AM 2015-06-26: Changed the behaviour here: In case of multiple labels, don't put them all
-		// into the set of potential types but rather create a combined type.
-		// E.g. a node with the two labels 'Person' and 'Entity' will get a type 'EntityPerson'
-		final List<String> labelStrings = new ArrayList<>();
 		for (final Label label : node.getLabels()) {
-			labelStrings.add(label.name());
+			addType(label.name());
 		}
-		//Collections.sort(labelStrings);
-		addType(StringUtils.join(labelStrings, ""));
 
 		// second try: type attribute
 		if (node.hasProperty("type")) {
