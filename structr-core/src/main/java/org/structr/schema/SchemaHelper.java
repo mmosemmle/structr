@@ -1100,7 +1100,7 @@ public class SchemaHelper {
 		final Class<? extends GraphObject> relatedType = property.relatedType();
 		if (relatedType != null) {
 
-			map.put("relatedType", relatedType.getName());
+			map.put("relatedType", SchemaHelper.parseClassName(relatedType.getName()));
 			map.put("type", SchemaHelper.parseClassName(relatedType.getSimpleName()));
 			map.put("uiType", SchemaHelper.parseClassName(relatedType.getSimpleName()) + (property.isCollection() ? "[]" : ""));
 
