@@ -461,27 +461,39 @@ jQuery.isBlank = function (obj) {
  * thin wrapper for localStorage with a success-check and error display
  */
 
-var localStorageObject = {};
+var LSWrapper = new (function() {
 
-var LSWrapper = {
+	var _localStorageObject = {};
 
-	setItem: function(key, value) {
-		localStorageObject[key] = value;
-	},
+	this.isLoaded = function () {
+		return !(!_localStorageObject || (Object.keys(_localStorageObject).length === 0 && _localStorageObject.constructor === Object));
+	};
 
-	getItem: function (key) {
-		return localStorageObject[key] || null;
-	},
+	this.setItem = function(key, value) {
+		_localStorageObject[key] = value;
+	};
 
-	removeItem: function (key) {
-		delete localStorageObject[key];
-	},
+	this.getItem = function (key) {
+		return _localStorageObject[key] || null;
+	};
 
-	clear: function () {
-		localStorageObject = {};
-	}
+	this.removeItem = function (key) {
+		delete _localStorageObject[key];
+	};
 
-};
+	this.clear = function () {
+		_localStorageObject = {};
+	};
+
+	this.getAsJSON = function () {
+		return JSON.stringify(_localStorageObject);
+	};
+
+	this.setAsJSON = function (json) {
+		_localStorageObject = JSON.parse(json);
+	};
+
+});
 
 function fastRemoveAllChildren(el) {
 	if (!el) return;
@@ -704,3 +716,143 @@ var _Logger = {
 		return logtypes;
 	}
 };
+
+/**
+ * Encapsulated Console object so we can keep error-handling and console-code in one place
+ */
+var _Console = new (function () {
+
+	// private variables
+	var _$terminal;
+	var _consoleDisabled = true;
+
+
+	// public methods
+	this.logoutAction = function () {
+		Command.console('clear');
+		Command.console('exit');
+		_consoleDisabled = true;
+
+		if (_$terminal) {
+			_$terminal.clear();
+		}
+
+		$('#structr-console').hide();
+	};
+
+	this.initConsole = function() {
+		_consoleDisabled = false;
+		var greetings =   '        _                          _         \n'
+						+ ' ____  | |_   ___   _   _   ____  | |_   ___ \n'
+						+ '(  __| | __| |  _| | | | | |  __| | __| |  _|\n'
+						+ ' \\ \\   | |   | |   | | | | | |    | |   | |\n'
+						+ ' _\\ \\  | |_  | |   | |_| | | |__  | |_  | |\n'
+						+ '|____) |___| |_|   |_____| |____| |___| |_|  \n\n';
+
+		// Get initial mode and prompt from backend
+		Command.console('Console.getMode()', function(data) {
+
+			var message = data.message;
+			var mode = data.data.mode;
+			var prompt = data.data.prompt;
+			var versionInfo = data.data.versionInfo;
+			//console.log(message, mode, prompt, versionInfo);
+
+			var consoleEl = $('#structr-console');
+			_$terminal = consoleEl.terminal(function(command, term) {
+				if (command !== '') {
+					try {
+
+						Command.console(command, function(data) {
+							var prompt = data.data.prompt;
+							if (prompt) {
+								term.set_prompt(prompt + '> ');
+							}
+
+							var result = data.message;
+							if (result !== undefined) {
+								term.echo(new String(result));
+							}
+						});
+
+					} catch (e) {
+						term.error(new String(e));
+					}
+				} else {
+					term.echo('');
+				}
+			}, {
+				greetings: greetings + 'Welcome to Structr (' + versionInfo + '). Use <Shift>+<Tab> to switch modes.',
+				name: 'structr-console',
+				height: 470,
+				prompt: prompt + '> ',
+				keydown: function(e) {
+					if (e.which === 17) {
+						return true;
+					}
+				},
+				completion: function(term, lineToBeCompleted, callback) {
+
+					if (shiftKey) {
+
+						switch (term.consoleMode) {
+
+							case 'REST':
+								mode = 'JavaScript';
+								break;
+
+							case 'JavaScript':
+								mode = 'StructrScript';
+								break;
+
+							case 'StructrScript':
+								mode = 'Cypher';
+								break;
+
+							case 'Cypher':
+								mode = 'AdminShell';
+								break;
+
+							case 'AdminShell':
+								mode = 'REST';
+								break;
+						}
+
+						var line = 'Console.setMode("' + mode + '")';
+						term.consoleMode = mode;
+
+						Command.console(line, function(data) {
+							var prompt = data.data.prompt;
+							if (prompt) {
+								term.set_prompt(prompt + '> ');
+							}
+							var result = data.message;
+							if (result !== undefined) {
+								term.echo(new String(result));
+							}
+						});
+
+					} else {
+						Command.console(lineToBeCompleted, function(data) {
+							var commands = JSON.parse(data.data.commands);
+							callback(commands);
+						}, true);
+					}
+				}
+			});
+			_$terminal.consoleMode = mode;
+			_$terminal.echo(message);
+		});
+	};
+
+	this.toggleConsole = function() {
+		if (_consoleDisabled) {
+			return;
+		}
+		$('#structr-console').slideToggle('fast');
+		if (_$terminal) {
+			_$terminal.focus(true);
+		}
+	};
+
+});

@@ -551,12 +551,13 @@ public class SchemaHelper {
 
 		final PropertyContainer propertyContainer = entity.getPropertyContainer();
 		final ConfigurationProvider config        = StructrApp.getConfiguration();
+		final String superClassName               = entity.getSuperclassName();
 		final StringBuilder src                   = new StringBuilder();
 
-		Class superClass = config.getNodeEntityClass(entity.getSuperclassName());
+		Class superClass = getClassForName(superClassName);
 		if (superClass == null) {
 
-			superClass = config.getRelationshipEntityClass(entity.getSuperclassName());
+			superClass = config.getRelationshipEntityClass(superClassName);
 		}
 
 		if (superClass == null) {
@@ -902,11 +903,11 @@ public class SchemaHelper {
 	public static String formatClassName(final String className) {
 		return !className.endsWith(CLASS_NAME_SUFFIX) ? className.concat(CLASS_NAME_SUFFIX) : className;
 	}
-	
+
 	public static String parseClassName(final String className) {
 		return StringUtils.substringBefore(className, CLASS_NAME_SUFFIX);
 	}
-	
+
 	public static void formatValidators(final StringBuilder src, final Set<Validator> validators) {
 
 		if (!validators.isEmpty()) {
@@ -1100,7 +1101,7 @@ public class SchemaHelper {
 		final Class<? extends GraphObject> relatedType = property.relatedType();
 		if (relatedType != null) {
 
-			map.put("relatedType", relatedType.getName());
+			map.put("relatedType", SchemaHelper.parseClassName(relatedType.getName()));
 			map.put("type", SchemaHelper.parseClassName(relatedType.getSimpleName()));
 			map.put("uiType", SchemaHelper.parseClassName(relatedType.getSimpleName()) + (property.isCollection() ? "[]" : ""));
 
@@ -1219,4 +1220,20 @@ public class SchemaHelper {
 		return signature + "/_Ui";
 	}
 
+	private static Class getClassForName(final String className) {
+
+		if (className.startsWith("org.structr.")) {
+
+			try {
+
+				return Class.forName(className);
+
+			} catch (ClassNotFoundException ex) {
+
+				logger.error("No class found for name {}.", className);
+			}
+		}
+
+		return null;
+	}
 }
